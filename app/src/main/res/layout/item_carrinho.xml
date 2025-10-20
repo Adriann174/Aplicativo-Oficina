@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:padding="12dp"
+    android:gravity="center_vertical"
+    android:background="@drawable/glass_card"
+    android:layout_marginVertical="6dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/imgCarrinho"
+        android:src="@drawable/ic_image"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:background="#EDE7E1"
+        android:scaleType="centerCrop"
+        android:layout_marginEnd="12dp" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/txtNomeCarrinho"
+            android:text="Nome do item"
+            android:textColor="@color/text_primary"
+            android:textSize="16sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/txtDescricaoCarrinho"
+            android:text="Descrição do item"
+            android:textColor="@color/text_secondary"
+            android:textSize="13sp"
+            android:layout_marginTop="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/txtPrecoCarrinho"
+            android:text="R$ 0,00"
+            android:textColor="@color/fiat_red"
+            android:textSize="15sp"
+            android:layout_marginTop="6dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/btnDelete"
+        android:src="@drawable/ic_delete"
+        android:background="@drawable/btn_primary"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        app:tint="#FF3B30" />
+</LinearLayout>
+

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/bg_light"
+    android:padding="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left">
+
+        <ImageButton
+            android:id="@+id/btnVoltar"
+            android:src="@drawable/ic_arrow_back"
+            android:background="@android:color/transparent"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            app:tint="#000000" />
+    </LinearLayout>
+
+    <TextView
+        android:text="Itens adicionados ao carrinho"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:layout_marginStart="8dp"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerCarrinho"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingVertical="8dp"/>
+
+    <TextView
+        android:id="@+id/txtTotal"
+        android:textColor="@color/text_primary"
+        android:textSize="16sp"
+        android:text="Total: R$ 0,00"
+        android:layout_marginBottom="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/btnEnviar"
+        android:text="Finalizar pedido"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        android:textColor="#ffff"
+        android:background="@drawable/btn_primary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+</LinearLayout>
+

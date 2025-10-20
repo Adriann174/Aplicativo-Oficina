@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="bg_light">#F6F1EB</color>
+    <color name="surface">#FFFFFFFF</color>
+    <color name="coffee_primary">#6B4F3A</color>
+    <color name="coffee_secondary">#C9B8A6</color>
+    <color name="accent">#6B4F3A</color>
+    <color name="accent_soft">#206B4F3A</color>
+    <color name="text_primary">#2B2B2B</color>
+    <color name="text_secondary">#7A6E62</color>
+    <color name="fiat_red">#B40C0C</color>
+    <color name="metal_grey">#ECEDEF</color>
+    <color name="meta_text">#4A4D52</color>
+</resources>
