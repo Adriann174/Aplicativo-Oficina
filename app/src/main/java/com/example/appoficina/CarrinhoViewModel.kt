@@ -17,6 +17,14 @@ class CarrinhoViewModel : ViewModel() {
     fun limparCarrinho() {
         CartRepository.clear()
     }
+    
+    fun incrementarQuantidade(item: Item) {
+        CartRepository.incrementarQuantidade(item)
+    }
+    
+    fun decrementarQuantidade(item: Item) {
+        CartRepository.decrementarQuantidade(item)
+    }
 }
 
 

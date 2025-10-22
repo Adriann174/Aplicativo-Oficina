@@ -22,16 +22,24 @@ class CarrinhoActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this).get(CarrinhoViewModel::class.java)
 
         val recycler = findViewById<RecyclerView>(R.id.recyclerCarrinho)
-        adapter = CarrinhoAdapter { item ->
-            viewModel.removerItem(item)
-        }
+        adapter = CarrinhoAdapter(
+            onRemoveClick = { item ->
+                viewModel.removerItem(item)
+            },
+            onIncrementClick = { item ->
+                viewModel.incrementarQuantidade(item)
+            },
+            onDecrementClick = { item ->
+                viewModel.decrementarQuantidade(item)
+            }
+        )
 
         recycler.layoutManager = LinearLayoutManager(this)
         recycler.adapter = adapter
 
         viewModel.itensCarrinho.observe(this) { itens ->
             adapter.updateList(itens)
-            val total = itens.sumOf { it.preco }
+            val total = itens.sumOf { it.preco * it.quantidade }
             findViewById<TextView>(R.id.txtTotal).text = String.format("Total: R$ %.2f", total)
         }
 

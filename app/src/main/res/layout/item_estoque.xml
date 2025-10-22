@@ -53,12 +53,28 @@
 
     </LinearLayout>
 
-    <ImageButton
-        android:id="@+id/btnAdd"
-        android:src="@drawable/ic_add"
-        android:background="@drawable/btn_primary"
-        app:tint="@color/fiat_red"
-        android:layout_width="44dp"
-        android:layout_height="44dp"/>
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:id="@+id/btnAdd"
+            android:src="@drawable/ic_add"
+            android:background="@drawable/btn_primary"
+            app:tint="#FFFFFF"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginBottom="4dp"/>
+
+        <ImageButton
+            android:id="@+id/btnEdit"
+            android:src="@drawable/ic_edit"
+            android:background="@drawable/btn_secondary"
+            app:tint="@color/text_primary"
+            android:layout_width="44dp"
+            android:layout_height="44dp"/>
+
+    </LinearLayout>
 </LinearLayout>
 

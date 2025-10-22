@@ -15,16 +15,26 @@
             android:id="@+id/searchBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:background="@drawable/glass_input"
             android:fontFamily="sans-serif-medium"
             android:hint="Search..."
             android:padding="12dp"
-            android:layout_marginTop="20dp"
             android:textColor="@color/text_primary"
             android:textColorHint="@color/text_secondary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:layout_width="26dp"
+            android:layout_height="26dp"
+            android:layout_marginRight="8dp"
+            android:src="@drawable/search"
+            app:layout_constraintBottom_toBottomOf="@+id/searchBar"
+            app:layout_constraintEnd_toEndOf="@+id/searchBar"
+            app:layout_constraintTop_toTopOf="@+id/searchBar" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -36,22 +46,21 @@
 
     <Button
         android:id="@+id/btnAdicionar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:text="+"
+        android:textSize="24dp"
+        android:layout_gravity="right"
         android:layout_marginBottom="8dp"
         android:background="@drawable/btn_primary"
-        android:fontFamily="sans-serif-medium"
-        android:text="Adicionar Item"
-        android:textSize="18dp"
-        android:textStyle="bold"
-        android:textColor="@color/white" />
+        android:textStyle="normal" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#F4EFE9"
         android:layout_gravity="bottom"
-        android:background="@color/surface"
         app:itemIconTint="@color/bottom_nav_tint"
         app:itemTextColor="@color/bottom_nav_tint"
         app:labelVisibilityMode="labeled"

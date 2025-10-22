@@ -8,7 +8,8 @@ data class Item(
     val descricao: String,
     val imagePath: String?,
     val preco: Double,
-    val estoque: Int
+    val estoque: Int,
+    var quantidade: Int = 1
 ) : Serializable
 
 

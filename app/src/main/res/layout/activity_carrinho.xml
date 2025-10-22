@@ -43,6 +43,7 @@
         android:id="@+id/txtTotal"
         android:textColor="@color/text_primary"
         android:textSize="16sp"
+        android:textStyle="bold"
         android:text="Total: R$ 0,00"
         android:layout_marginBottom="8dp"
         android:layout_width="match_parent"

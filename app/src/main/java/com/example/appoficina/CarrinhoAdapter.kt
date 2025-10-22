@@ -10,7 +10,9 @@ import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.recyclerview.widget.RecyclerView
 
 class CarrinhoAdapter(
-    private val onRemoveClick: (Item) -> Unit
+    private val onRemoveClick: (Item) -> Unit,
+    private val onIncrementClick: (Item) -> Unit,
+    private val onDecrementClick: (Item) -> Unit
 ) : RecyclerView.Adapter<CarrinhoAdapter.ViewHolder>() {
 
     private var itens = mutableListOf<Item>()
@@ -21,6 +23,9 @@ class CarrinhoAdapter(
         val preco: TextView = view.findViewById(R.id.txtPrecoCarrinho)
         val img: ImageView = view.findViewById(R.id.imgCarrinho)
         val btnDelete: ImageButton = view.findViewById(R.id.btnDelete)
+        val btnIncrementar: ImageButton = view.findViewById(R.id.btnIncrementar)
+        val btnDecrementar: ImageButton = view.findViewById(R.id.btnDecrementar)
+        val txtQuantidade: TextView = view.findViewById(R.id.txtQuantidade)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -32,7 +37,8 @@ class CarrinhoAdapter(
         val item = itens[position]
         holder.nome.text = item.nome
         holder.descricao.text = item.descricao
-        holder.preco.text = String.format("R$ %.2f", item.preco)
+        holder.preco.text = String.format("R$ %.2f", item.preco * item.quantidade)
+        holder.txtQuantidade.text = item.quantidade.toString()
 
         // carregar as imagens
         item.imagePath?.let { path ->
@@ -48,6 +54,24 @@ class CarrinhoAdapter(
                     it.animate().scaleX(1f).scaleY(1f).setDuration(120)
                         .setInterpolator(AccelerateDecelerateInterpolator()).start()
                     onRemoveClick(item)
+                }.start()
+        }
+        
+        holder.btnIncrementar.setOnClickListener {
+            it.animate().scaleX(0.9f).scaleY(0.9f).setDuration(80)
+                .withEndAction {
+                    it.animate().scaleX(1f).scaleY(1f).setDuration(120)
+                        .setInterpolator(AccelerateDecelerateInterpolator()).start()
+                    onIncrementClick(item)
+                }.start()
+        }
+        
+        holder.btnDecrementar.setOnClickListener {
+            it.animate().scaleX(0.9f).scaleY(0.9f).setDuration(80)
+                .withEndAction {
+                    it.animate().scaleX(1f).scaleY(1f).setDuration(120)
+                        .setInterpolator(AccelerateDecelerateInterpolator()).start()
+                    onDecrementClick(item)
                 }.start()
         }
     }

@@ -11,7 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 class EstoqueAdapter(
     private val originalItens: MutableList<Item>,
     private val onAddClick: (Item) -> Unit,
-    private val onItemClick: (Item) -> Unit
+    private val onItemClick: (Item) -> Unit,
+    private val onEditClick: (Item) -> Unit
 ) : RecyclerView.Adapter<EstoqueAdapter.ViewHolder>() {
 
     private var filteredItens: List<Item> = originalItens
@@ -22,6 +23,7 @@ class EstoqueAdapter(
         val preco: TextView = view.findViewById(R.id.txtPreco)
         val img: ImageView = view.findViewById(R.id.imgThumb)
         val btnAdd: ImageButton = view.findViewById(R.id.btnAdd)
+        val btnEdit: ImageButton = view.findViewById(R.id.btnEdit)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -44,6 +46,7 @@ class EstoqueAdapter(
         }
         
         holder.btnAdd.setOnClickListener { onAddClick(item) }
+        holder.btnEdit.setOnClickListener { onEditClick(item) }
         holder.itemView.setOnClickListener { onItemClick(item) }
     }
 
@@ -63,6 +66,15 @@ class EstoqueAdapter(
         originalItens.add(item)
         filteredItens = originalItens
         notifyDataSetChanged()
+    }
+
+    fun updateItem(updatedItem: Item) {
+        val index = originalItens.indexOfFirst { it.id == updatedItem.id }
+        if (index != -1) {
+            originalItens[index] = updatedItem
+            filteredItens = originalItens
+            notifyDataSetChanged()
+        }
     }
 }
 

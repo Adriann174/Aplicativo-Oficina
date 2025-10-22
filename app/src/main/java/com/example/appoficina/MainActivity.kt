@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -20,26 +21,32 @@ class MainActivity : AppCompatActivity() {
     private lateinit var adapter: EstoqueAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        window.decorView.systemUiVisibility =
+            (View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY or View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
+
 
         viewModel = ViewModelProvider(this).get(CarrinhoViewModel::class.java)
 
         val listaItens = mutableListOf<Item>()
 
 
-        adapter = EstoqueAdapter(listaItens,
-            onAddClick = { item ->
-                viewModel.adicionarItem(item)
-                Toast.makeText(this, "${item.nome} adicionado ao carrinho", Toast.LENGTH_SHORT).show()
-            },
-            onItemClick = { item ->
-                val intent = Intent(this, DetalhesActivity::class.java)
-                intent.putExtra(DetalhesActivity.EXTRA_ITEM, item)
-                startActivity(intent)
-                overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
-            }
-        )
+        adapter = EstoqueAdapter(listaItens, onAddClick = { item ->
+            viewModel.adicionarItem(item)
+            Toast.makeText(this, "${item.nome} adicionado ao carrinho", Toast.LENGTH_SHORT).show()
+        }, onItemClick = { item ->
+            val intent = Intent(this, DetalhesActivity::class.java)
+            intent.putExtra(DetalhesActivity.EXTRA_ITEM, item)
+            startActivity(intent)
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+        }, onEditClick = { item ->
+            val intent = Intent(this, EditItemActivity::class.java)
+            intent.putExtra(EditItemActivity.EXTRA_ITEM, item)
+            startActivityForResult(intent, REQ_EDIT_ITEM)
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+        })
 
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerEstoque)
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -61,11 +68,12 @@ class MainActivity : AppCompatActivity() {
 
         val search = findViewById<EditText>(R.id.searchBar)
         search.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 adapter.filter(s?.toString())
             }
-            override fun afterTextChanged(s: Editable?) { }
+
+            override fun afterTextChanged(s: Editable?) {}
         })
 
         findViewById<Button>(R.id.btnAdicionar).setOnClickListener {
@@ -81,6 +89,7 @@ class MainActivity : AppCompatActivity() {
                     overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
                     true
                 }
+
                 else -> false
             }
         }
@@ -92,10 +101,15 @@ class MainActivity : AppCompatActivity() {
             val item = data.getSerializableExtra(AddItemActivity.EXTRA_ITEM) as Item
             adapter.addItem(item)
             Toast.makeText(this, "Item adicionado ao estoque", Toast.LENGTH_SHORT).show()
+        } else if (requestCode == REQ_EDIT_ITEM && resultCode == RESULT_OK && data != null) {
+            val item = data.getSerializableExtra(EditItemActivity.EXTRA_ITEM) as Item
+            adapter.updateItem(item)
+            Toast.makeText(this, "Item atualizado com sucesso", Toast.LENGTH_SHORT).show()
         }
     }
 
     companion object {
         private const val REQ_ADD_ITEM = 2001
+        private const val REQ_EDIT_ITEM = 2002
     }
 }

@@ -13,4 +13,5 @@
     <color name="fiat_red">#B40C0C</color>
     <color name="metal_grey">#ECEDEF</color>
     <color name="meta_text">#4A4D52</color>
+    <color name="background">#F6F1EB</color>
 </resources>
