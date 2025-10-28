@@ -39,16 +39,6 @@
         android:layout_weight="1"
         android:paddingVertical="8dp"/>
 
-    <TextView
-        android:id="@+id/txtTotal"
-        android:textColor="@color/text_primary"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:text="Total: R$ 0,00"
-        android:layout_marginBottom="8dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
     <Button
         android:id="@+id/btnEnviar"
         android:text="Finalizar pedido"
@@ -58,5 +48,16 @@
         android:background="@drawable/btn_primary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#F4EFE9"
+        android:layout_gravity="bottom"
+        app:itemIconTint="@color/bottom_nav_tint"
+        app:itemTextColor="@color/bottom_nav_tint"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/menu_bottom" />
 </LinearLayout>
 

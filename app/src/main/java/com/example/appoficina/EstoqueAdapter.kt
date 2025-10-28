@@ -20,7 +20,6 @@ class EstoqueAdapter(
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val nome: TextView = view.findViewById(R.id.txtNomeItem)
         val descricao: TextView = view.findViewById(R.id.txtDescricao)
-        val preco: TextView = view.findViewById(R.id.txtPreco)
         val img: ImageView = view.findViewById(R.id.imgThumb)
         val btnAdd: ImageButton = view.findViewById(R.id.btnAdd)
         val btnEdit: ImageButton = view.findViewById(R.id.btnEdit)
@@ -35,8 +34,6 @@ class EstoqueAdapter(
         val item = filteredItens[position]
         holder.nome.text = item.nome
         holder.descricao.text = item.descricao
-        holder.preco.text = String.format("R$ %.2f", item.preco)
-        
         // Carregar imagem se existir
         item.imagePath?.let { path ->
             val file = java.io.File(path)

@@ -20,7 +20,6 @@ class CarrinhoAdapter(
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val nome: TextView = view.findViewById(R.id.txtNomeCarrinho)
         val descricao: TextView = view.findViewById(R.id.txtDescricaoCarrinho)
-        val preco: TextView = view.findViewById(R.id.txtPrecoCarrinho)
         val img: ImageView = view.findViewById(R.id.imgCarrinho)
         val btnDelete: ImageButton = view.findViewById(R.id.btnDelete)
         val btnIncrementar: ImageButton = view.findViewById(R.id.btnIncrementar)
@@ -37,7 +36,6 @@ class CarrinhoAdapter(
         val item = itens[position]
         holder.nome.text = item.nome
         holder.descricao.text = item.descricao
-        holder.preco.text = String.format("R$ %.2f", item.preco * item.quantidade)
         holder.txtQuantidade.text = item.quantidade.toString()
 
         // carregar as imagens

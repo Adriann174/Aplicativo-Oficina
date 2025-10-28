@@ -1,17 +1,21 @@
 package com.example.appoficina
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.MenuItem
+import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.Toast
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class CarrinhoActivity : AppCompatActivity() {
 
+    private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var viewModel: CarrinhoViewModel
     private lateinit var adapter: CarrinhoAdapter
 
@@ -39,19 +43,32 @@ class CarrinhoActivity : AppCompatActivity() {
 
         viewModel.itensCarrinho.observe(this) { itens ->
             adapter.updateList(itens)
-            val total = itens.sumOf { it.preco * it.quantidade }
-            findViewById<TextView>(R.id.txtTotal).text = String.format("Total: R$ %.2f", total)
+
+            findViewById<Button>(R.id.btnEnviar).setOnClickListener {
+                Toast.makeText(this, "Itens enviados para o setor!", Toast.LENGTH_SHORT).show()
+                viewModel.limparCarrinho()
+            }
+
+            findViewById<ImageButton>(R.id.btnVoltar).setOnClickListener {
+                finish()
+            }
         }
 
-        findViewById<Button>(R.id.btnEnviar).setOnClickListener {
-            Toast.makeText(this, "Itens enviados para o setor!", Toast.LENGTH_SHORT).show()
-            viewModel.limparCarrinho()
-        }
+        // Obter BottomNavigationView do layout (ajuste R.id.bottom se necessário)
+        val bottom = findViewById<BottomNavigationView>(R.id.bottomNav)
 
-        findViewById<ImageButton>(R.id.btnVoltar).setOnClickListener {
-            finish()
+        bottom.selectedItemId = R.id.nav_pedidos
+        bottom.setOnItemSelectedListener { item: MenuItem ->
+            when (item.itemId) {
+                R.id.nav_pedidos -> true
+                R.id.nav_home -> {
+                    startActivity(Intent(this, MainActivity::class.java))
+                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+                    true
+                }
+
+                else -> false
+            }
         }
     }
 }
-
-

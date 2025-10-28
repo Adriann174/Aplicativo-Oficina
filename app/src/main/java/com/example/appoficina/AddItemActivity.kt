@@ -24,7 +24,6 @@ class AddItemActivity : AppCompatActivity() {
     private lateinit var imageView: ImageView
     private lateinit var editNome: EditText
     private lateinit var editDescricao: EditText
-    private lateinit var editPreco: EditText
     private lateinit var editEstoque: EditText
     private lateinit var btnCamera: Button
     private lateinit var btnSalvar: Button
@@ -33,6 +32,7 @@ class AddItemActivity : AppCompatActivity() {
     private var currentPhotoPath: String? = null
     private val REQUEST_IMAGE_CAPTURE = 1
     private val REQUEST_PERMISSION_CAMERA = 100
+    private val REQUEST_PERMISSION_STORAGE = 101
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +46,6 @@ class AddItemActivity : AppCompatActivity() {
         imageView = findViewById(R.id.imageView)
         editNome = findViewById(R.id.editNome)
         editDescricao = findViewById(R.id.editDescricao)
-        editPreco = findViewById(R.id.editPreco)
         editEstoque = findViewById(R.id.editEstoque)
         btnCamera = findViewById(R.id.btnCamera)
         btnSalvar = findViewById(R.id.btnSalvar)
@@ -62,6 +61,11 @@ class AddItemActivity : AppCompatActivity() {
                 requestCameraPermission()
             }
         }
+
+
+
+
+
 
         btnVoltar.setOnClickListener {
             finish()
@@ -147,18 +151,16 @@ class AddItemActivity : AppCompatActivity() {
     private fun saveItem() {
         val nome = editNome.text.toString().trim()
         val descricao = editDescricao.text.toString().trim()
-        val precoStr = editPreco.text.toString().trim()
         val estoqueStr = editEstoque.text.toString().trim()
 
-        if (nome.isEmpty() || descricao.isEmpty() || precoStr.isEmpty() || estoqueStr.isEmpty()) {
+        if (nome.isEmpty() || descricao.isEmpty() || estoqueStr.isEmpty()) {
             Toast.makeText(this, "Preencha todos os campos", Toast.LENGTH_SHORT).show()
             return
         }
 
-        val preco = precoStr.toDoubleOrNull()
         val estoque = estoqueStr.toIntOrNull()
 
-        if (preco == null || estoque == null) {
+        if (estoque == null) {
             Toast.makeText(this, "Preço e estoque devem ser números válidos", Toast.LENGTH_SHORT)
                 .show()
             return
@@ -168,7 +170,6 @@ class AddItemActivity : AppCompatActivity() {
             id = System.currentTimeMillis().toInt(),
             nome = nome,
             descricao = descricao,
-            preco = preco,
             estoque = estoque,
             imagePath = currentPhotoPath, // Corrected from imageUrl to imagePath
         )
