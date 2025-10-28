@@ -11,31 +11,27 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Header com botão voltar -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            android:textSize="16dp"
+            android:textSize="20dp"
             android:layout_gravity="center"
             android:textColor="@color/black"
-            android:text="Editar Produto"/>
+            android:text="Adicionar produto"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            android:layout_marginBottom="24dp">
+            android:gravity="start">
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/btnVoltar"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@android:color/transparent"
                 android:src="@drawable/ic_arrow_back"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:padding="4dp"
-                android:contentDescription="Voltar" />
+                app:tint="@color/text_primary" />
 
         </LinearLayout>
 
@@ -50,12 +46,12 @@
 
             <ImageView
                 android:id="@+id/imageView"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:background="@drawable/glass_card"
+                android:contentDescription="Imagem do produto"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_image"
-                android:contentDescription="Imagem do produto" />
+                android:src="@drawable/ic_image" />
 
             <Button
                 android:id="@+id/btnCamera"
@@ -93,6 +89,8 @@
                 android:background="@drawable/glass_input"
                 android:hint="Digite o nome do produto"
                 android:padding="12dp"
+                android:maxLines="1"
+                android:inputType="text"
                 android:textColor="@color/text_primary"
                 android:textColorHint="@color/text_secondary"
                 android:textSize="16sp"
@@ -115,6 +113,7 @@
                 android:background="@drawable/glass_input"
                 android:hint="Digite a descrição do produto"
                 android:padding="12dp"
+                android:maxLines="5"
                 android:textColor="@color/text_primary"
                 android:textColorHint="@color/text_secondary"
                 android:textSize="16sp"
@@ -128,44 +127,12 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <!-- Preço -->
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:layout_marginEnd="8dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Preço (R$)"
-                        android:textColor="@color/text_primary"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:layout_marginBottom="8dp" />
-
-                    <EditText
-                        android:id="@+id/editPreco"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/glass_input"
-                        android:hint="0,00"
-                        android:padding="12dp"
-                        android:textColor="@color/text_primary"
-                        android:textColorHint="@color/text_secondary"
-                        android:textSize="16sp"
-                        android:inputType="numberDecimal" />
-
-                </LinearLayout>
-
                 <!-- Estoque -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:layout_marginStart="8dp">
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -178,7 +145,7 @@
 
                     <EditText
                         android:id="@+id/editEstoque"
-                        android:layout_width="match_parent"
+                        android:layout_width="130dp"
                         android:layout_height="wrap_content"
                         android:background="@drawable/glass_input"
                         android:hint="0"

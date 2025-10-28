@@ -7,10 +7,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Produtos no Carrinho"
+        android:textColor="@color/black"
+        android:textSize="20dp"
+        android:textStyle="bold" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="left">
+
 
         <ImageButton
             android:id="@+id/btnVoltar"
@@ -21,16 +31,6 @@
             app:tint="#000000" />
     </LinearLayout>
 
-    <TextView
-        android:text="Itens adicionados ao carrinho"
-        android:textColor="#000000"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:layout_gravity="center"
-        android:layout_marginStart="8dp"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerCarrinho"
@@ -39,24 +39,28 @@
         android:layout_weight="1"
         android:paddingVertical="8dp"/>
 
-    <TextView
-        android:id="@+id/txtTotal"
-        android:textColor="@color/text_primary"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:text="Total: R$ 0,00"
-        android:layout_marginBottom="8dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
     <Button
         android:id="@+id/btnEnviar"
         android:text="Finalizar pedido"
         android:textSize="18dp"
         android:textStyle="bold"
         android:textColor="#ffff"
+        android:drawableLeft="@drawable/ic_shop"
         android:background="@drawable/btn_primary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+
+
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#F4EFE9"
+        android:layout_gravity="bottom"
+        app:itemIconTint="@color/bottom_nav_tint"
+        app:itemTextColor="@color/bottom_nav_tint"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/menu_bottom" />
 </LinearLayout>
 

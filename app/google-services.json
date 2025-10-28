@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "882464548131",
+    "project_id": "motorup-4559a",
+    "storage_bucket": "motorup-4559a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:882464548131:android:5fca3361d397af674fd896",
+        "android_client_info": {
+          "package_name": "com.example.appoficina"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbRvxs33IOmwZCrz1UXJK0n8d6fd3TGEg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

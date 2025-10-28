@@ -33,7 +33,6 @@ class DetalhesActivity : AppCompatActivity() {
         val imageView = findViewById<ImageView>(R.id.imageView)
         val txtNome = findViewById<TextView>(R.id.txtNome)
         val txtDescricao = findViewById<TextView>(R.id.txtDescricao)
-        val txtPreco = findViewById<TextView>(R.id.txtPreco)
         val txtEstoque = findViewById<TextView>(R.id.txtEstoque)
         val btnVoltar = findViewById<ImageButton>(R.id.btnVoltar)
         val btnAdicionar = findViewById<Button>(R.id.btnAdicionar)
@@ -49,7 +48,6 @@ class DetalhesActivity : AppCompatActivity() {
 
         txtNome.text = item.nome
         txtDescricao.text = item.descricao
-        txtPreco.text = String.format("R$ %.2f", item.preco)
         txtEstoque.text = "Estoque: ${item.estoque} unidades"
 
         btnAdicionar.setOnClickListener {
