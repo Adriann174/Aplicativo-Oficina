@@ -13,15 +13,6 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textSize="20dp"
-            android:layout_gravity="center"
-            android:textColor="@color/black"
-            android:text="Detalhes do Produto"/>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -34,7 +25,6 @@
                 android:background="@android:color/transparent"
                 android:src="@drawable/ic_arrow_back"
                 app:tint="@color/text_primary" />
-
         </LinearLayout>
 
         <androidx.cardview.widget.CardView

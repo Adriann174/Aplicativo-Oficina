@@ -7,20 +7,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Produtos no Carrinho"
-        android:textColor="@color/black"
-        android:textSize="20dp"
-        android:textStyle="bold" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="left">
-
 
         <ImageButton
             android:id="@+id/btnVoltar"
@@ -31,6 +21,16 @@
             app:tint="#000000" />
     </LinearLayout>
 
+    <TextView
+        android:text="Itens adicionados ao carrinho"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_gravity="center"
+        android:layout_marginStart="8dp"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerCarrinho"
@@ -45,12 +45,9 @@
         android:textSize="18dp"
         android:textStyle="bold"
         android:textColor="#ffff"
-        android:drawableLeft="@drawable/ic_shop"
         android:background="@drawable/btn_primary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
-
-
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNav"
