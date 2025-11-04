@@ -28,7 +28,6 @@ class AddItemActivity : AppCompatActivity() {
     private lateinit var btnCamera: Button
     private lateinit var btnSalvar: Button
     private lateinit var btnVoltar: ImageView
-
     private var currentPhotoPath: String? = null
     private val REQUEST_IMAGE_CAPTURE = 1
     private val REQUEST_PERMISSION_CAMERA = 100
