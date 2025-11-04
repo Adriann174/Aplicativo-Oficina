@@ -118,40 +118,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <!-- Estoque -->
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="0dp"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:text="Estoque"
-                        android:textColor="@color/text_primary"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
-                    <EditText
-                        android:id="@+id/editEstoque"
-                        android:layout_width="130dp"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/glass_input"
-                        android:hint="0"
-                        android:inputType="number"
-                        android:padding="12dp"
-                        android:textColor="@color/text_primary"
-                        android:textColorHint="@color/text_secondary"
-                        android:textSize="16sp" />
-
-                </LinearLayout>
-
-            </LinearLayout>
+                android:orientation="horizontal"/>
 
             <Button
                 android:id="@+id/btnSalvar"

@@ -25,7 +25,6 @@ class EditItemActivity : AppCompatActivity() {
     private lateinit var imageView: ImageView
     private lateinit var editNome: EditText
     private lateinit var editDescricao: EditText
-    private lateinit var editEstoque: EditText
     private lateinit var btnCamera: Button
     private lateinit var btnGaleria: Button
     private lateinit var btnSalvar: Button
@@ -58,7 +57,6 @@ class EditItemActivity : AppCompatActivity() {
         imageView = findViewById(R.id.imageView)
         editNome = findViewById(R.id.editNome)
         editDescricao = findViewById(R.id.editDescricao)
-        editEstoque = findViewById(R.id.editEstoque)
         btnCamera = findViewById(R.id.btnCamera)
         btnGaleria = findViewById(R.id.btnGaleria)
         btnSalvar = findViewById(R.id.btnSalvar)
@@ -86,8 +84,9 @@ class EditItemActivity : AppCompatActivity() {
             finish()
         }
 
-        btnSalvar.setOnClickListener {
+        this.btnSalvar.setOnClickListener {
             saveItem()
+            finish()
         }
     }
 
@@ -95,8 +94,7 @@ class EditItemActivity : AppCompatActivity() {
         itemToEdit?.let { item ->
             editNome.setText(item.nome)
             editDescricao.setText(item.descricao)
-            editEstoque.setText(item.estoque.toString())
-            
+
             // Carregar imagem existente se houver
             item.imagePath?.let { path ->
                 val file = File(path)
@@ -234,25 +232,15 @@ class EditItemActivity : AppCompatActivity() {
     private fun saveItem() {
         val nome = editNome.text.toString().trim()
         val descricao = editDescricao.text.toString().trim()
-        val estoqueStr = editEstoque.text.toString().trim()
 
-        if (nome.isEmpty() || descricao.isEmpty() || estoqueStr.isEmpty()) {
+        if (nome.isEmpty() || descricao.isEmpty()) {
             Toast.makeText(this, "Preencha todos os campos", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        val estoque = estoqueStr.toIntOrNull()
-
-        if (estoque == null) {
-            Toast.makeText(this, "Insira caracteres válidos", Toast.LENGTH_SHORT)
-                .show()
             return
         }
 
         val updatedItem = itemToEdit?.copy(
             nome = nome,
             descricao = descricao,
-            estoque = estoque,
             imagePath = currentPhotoPath ?: itemToEdit?.imagePath
         )
 

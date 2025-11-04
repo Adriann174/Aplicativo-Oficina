@@ -1,29 +1,43 @@
 package com.example.appoficina
 
 import android.content.Intent
+import android.media.Image
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import androidx.appcompat.app.AlertDialog
+import com.google.firebase.firestore.ListenerRegistration
 import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlin.jvm.java
 
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var viewModel: CarrinhoViewModel
     private lateinit var adapter: EstoqueAdapter
+    private var itemsListener: ListenerRegistration? = null
+    private lateinit var btnMenu: Button
+    private lateinit var imgRemoverTudo: ImageButton
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        imgRemoverTudo = findViewById<ImageButton>(R.id.imgRemoverTudo)
 
         viewModel = ViewModelProvider(this).get(CarrinhoViewModel::class.java)
 
@@ -48,6 +62,40 @@ class MainActivity : AppCompatActivity() {
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerEstoque)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
+
+        // Swipe para direita para excluir item do estoque
+        val swipeCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean = false
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.adapterPosition
+                val item = adapter.getItemAt(position)
+                FirebaseRepository.deletarItem(
+                    item.id,
+                    onSuccess = {
+                        adapter.removeById(item.id)
+                        Toast.makeText(
+                            this@MainActivity,
+                            "Excluído: ${item.nome}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    },
+                    onFailure = { e ->
+                        Toast.makeText(
+                            this@MainActivity,
+                            "Erro ao excluir: ${e.message}",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        adapter.notifyDataSetChanged()
+                    }
+                )
+            }
+        }
+        ItemTouchHelper(swipeCallback).attachToRecyclerView(recyclerView)
 
         // Carregar dados do Firebase
         carregarDadosFirebase()
@@ -80,6 +128,25 @@ class MainActivity : AppCompatActivity() {
             startActivityForResult(Intent(this, AddItemActivity::class.java), REQ_ADD_ITEM)
         }
 
+        // Remover todos os itens do estoque
+        imgRemoverTudo.setOnClickListener {
+            AlertDialog.Builder(this)
+                .setTitle("Remover tudo")
+                .setMessage("Tem certeza que deseja apagar todos os itens?")
+                .setPositiveButton("Apagar") { _, _ ->
+                    FirebaseRepository.deletarTodosItens(
+                        onSuccess = {
+                            Toast.makeText(this, "Todos os itens foram removidos", Toast.LENGTH_SHORT).show()
+                        },
+                        onFailure = { e ->
+                            Toast.makeText(this, "Erro ao remover todos: ${e.message}", Toast.LENGTH_LONG).show()
+                        }
+                    )
+                }
+                .setNegativeButton("Cancelar", null)
+                .show()
+        }
+
         bottom.selectedItemId = R.id.nav_home
         bottom.setOnItemSelectedListener { item ->
             when (item.itemId) {
@@ -93,6 +160,26 @@ class MainActivity : AppCompatActivity() {
                 else -> false
             }
         }
+    }
+
+
+    override fun onStart() {
+        super.onStart()
+        // Observa atualizações em tempo real
+        itemsListener = FirebaseRepository.observarItens(
+            onChange = { items ->
+                adapter.updateList(items.toMutableList())
+            },
+            onError = { e ->
+                Toast.makeText(this, "Erro em tempo real: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+        )
+    }
+
+    override fun onStop() {
+        super.onStop()
+        itemsListener?.remove()
+        itemsListener = null
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -115,15 +202,15 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "Dados carregados com sucesso!", Toast.LENGTH_SHORT).show()
             },
             onFailure = { exception ->
-                Toast.makeText(this, "Erro ao carregar dados: ${exception.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this,
+                    "Erro ao carregar dados: ${exception.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         )
     }
-
-
-
-
-
+    
 
     companion object {
         private const val REQ_ADD_ITEM = 2001

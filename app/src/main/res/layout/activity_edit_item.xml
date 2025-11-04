@@ -46,8 +46,8 @@
 
             <ImageView
                 android:id="@+id/imageView"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
                 android:background="@drawable/glass_card"
                 android:contentDescription="Imagem do produto"
                 android:scaleType="centerCrop"
@@ -62,7 +62,7 @@
                 android:background="@drawable/btn_secondary"
                 android:text="Tirar Foto"
                 android:textColor="@color/white"
-                android:textSize="14sp" />
+                android:textSize="16sp" />
 
             <Button
                 android:id="@+id/btnGaleria"
@@ -73,7 +73,7 @@
                 android:background="@drawable/btn_secondary"
                 android:text="Selecionar da Galeria"
                 android:textColor="@color/white"
-                android:textSize="14sp" />
+                android:textSize="16sp" />
 
         </LinearLayout>
 
@@ -136,39 +136,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <!-- Estoque -->
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Estoque"
-                        android:textColor="@color/text_primary"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:layout_marginBottom="8dp" />
-
-                    <EditText
-                        android:id="@+id/editEstoque"
-                        android:layout_width="130dp"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/glass_input"
-                        android:hint="0"
-                        android:padding="12dp"
-                        android:textColor="@color/text_primary"
-                        android:textColorHint="@color/text_secondary"
-                        android:textSize="16sp"
-                        android:inputType="number" />
-
-                </LinearLayout>
-
-            </LinearLayout>
+                android:orientation="horizontal"/>
 
         </LinearLayout>
 
@@ -181,7 +149,7 @@
             android:background="@drawable/btn_primary"
             android:text="Salvar Alterações"
             android:textColor="@color/white"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:textStyle="bold" />
 
     </LinearLayout>

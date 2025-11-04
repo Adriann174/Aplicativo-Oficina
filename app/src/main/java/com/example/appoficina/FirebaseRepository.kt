@@ -3,6 +3,7 @@ package com.example.appoficina
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.android.gms.tasks.Task
+import com.google.firebase.firestore.ListenerRegistration
 
 object FirebaseRepository {
     
@@ -15,7 +16,6 @@ object FirebaseRepository {
             "id" to item.id,
             "nome" to item.nome,
             "descricao" to item.descricao,
-            "estoque" to item.estoque,
             "imagePath" to item.imagePath,
             "quantidade" to item.quantidade
         )
@@ -42,7 +42,6 @@ object FirebaseRepository {
                         id = document.getLong("id")?.toInt() ?: 0,
                         nome = document.getString("nome") ?: "",
                         descricao = document.getString("descricao") ?: "",
-                        estoque = document.getLong("estoque")?.toInt() ?: 0,
                         imagePath = document.getString("imagePath"),
                         quantidade = document.getLong("quantidade")?.toInt() ?: 1
                     )
@@ -70,6 +69,45 @@ object FirebaseRepository {
             }
             .addOnFailureListener { exception ->
                 onFailure(exception)
+            }
+    }
+
+    // Deletar TODOS os itens da coleção
+    fun deletarTodosItens(onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
+        db.collection(COLLECTION_ITEMS)
+            .get()
+            .addOnSuccessListener { snapshot ->
+                val batch = db.batch()
+                snapshot.documents.forEach { doc ->
+                    batch.delete(doc.reference)
+                }
+                batch.commit()
+                    .addOnSuccessListener { onSuccess() }
+                    .addOnFailureListener { e -> onFailure(e) }
+            }
+            .addOnFailureListener { e -> onFailure(e) }
+    }
+
+    // Observar itens em tempo real
+    fun observarItens(onChange: (List<Item>) -> Unit, onError: (Exception) -> Unit): ListenerRegistration {
+        return db.collection(COLLECTION_ITEMS)
+            .addSnapshotListener { snapshot, e ->
+                if (e != null) {
+                    onError(e)
+                    return@addSnapshotListener
+                }
+                val items = mutableListOf<Item>()
+                snapshot?.documents?.forEach { document ->
+                    val item = Item(
+                        id = document.getLong("id")?.toInt() ?: 0,
+                        nome = document.getString("nome") ?: "",
+                        descricao = document.getString("descricao") ?: "",
+                        imagePath = document.getString("imagePath"),
+                        quantidade = document.getLong("quantidade")?.toInt() ?: 1
+                    )
+                    items.add(item)
+                }
+                onChange(items)
             }
     }
 }

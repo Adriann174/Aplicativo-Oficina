@@ -41,8 +41,8 @@
 
     <Button
         android:id="@+id/btnEnviar"
-        android:text="Finalizar pedido"
-        android:textSize="18dp"
+        android:text="Enviar para o setor"
+        android:textSize="16dp"
         android:textStyle="bold"
         android:textColor="#ffff"
         android:background="@drawable/btn_primary"

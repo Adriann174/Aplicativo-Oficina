@@ -49,6 +49,8 @@ class EstoqueAdapter(
 
     override fun getItemCount() = filteredItens.size
 
+    fun getItemAt(position: Int): Item = filteredItens[position]
+
     fun filter(query: String?) {
         val q = query?.trim()?.lowercase() ?: ""
         filteredItens = if (q.isEmpty()) {
@@ -60,9 +62,9 @@ class EstoqueAdapter(
     }
 
     fun addItem(item: Item) {
-        originalItens.add(item)
-        filteredItens = originalItens
-        notifyDataSetChanged()
+        originalItens.add(0, item)
+        filter(null)
+        notifyItemInserted(originalItens.indexOf(item))
     }
 
     fun updateItem(updatedItem: Item) {
@@ -79,6 +81,16 @@ class EstoqueAdapter(
         originalItens.addAll(newItems)
         filteredItens = originalItens
         notifyDataSetChanged()
+    }
+
+    fun removeById(id: Int) {
+        val index = originalItens.indexOfFirst { it.id == id }
+        if (index != -1) {
+            originalItens.removeAt(index)
+            filter(null)
+            notifyItemRemoved(index)
+            notifyItemRangeChanged(index, originalItens.size)
+        }
     }
 }
 

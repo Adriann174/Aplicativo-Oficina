@@ -1,6 +1,5 @@
 package com.example.appoficina
 
-import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ImageButton
@@ -33,7 +32,6 @@ class DetalhesActivity : AppCompatActivity() {
         val imageView = findViewById<ImageView>(R.id.imageView)
         val txtNome = findViewById<TextView>(R.id.txtNome)
         val txtDescricao = findViewById<TextView>(R.id.txtDescricao)
-        val txtEstoque = findViewById<TextView>(R.id.txtEstoque)
         val btnVoltar = findViewById<ImageButton>(R.id.btnVoltar)
         val btnAdicionar = findViewById<Button>(R.id.btnAdicionar)
 
@@ -48,21 +46,14 @@ class DetalhesActivity : AppCompatActivity() {
 
         txtNome.text = item.nome
         txtDescricao.text = item.descricao
-        txtEstoque.text = "Estoque: ${item.estoque} unidades"
-
         btnAdicionar.setOnClickListener {
-            if (item.estoque > 0) {
-                viewModel.adicionarItem(item)
-                Toast.makeText(this, "${item.nome} adicionado ao carrinho", Toast.LENGTH_SHORT)
-                    .show()
-            } else {
-                Toast.makeText(this, "Item fora de estoque", Toast.LENGTH_SHORT).show()
-            }
+            viewModel.adicionarItem(item)
+            Toast.makeText(this, "Item adicionado ao carrinho", Toast.LENGTH_SHORT).show()
         }
         btnVoltar.setOnClickListener {
             finish()
-        }
 
+        }
     }
 
     companion object {

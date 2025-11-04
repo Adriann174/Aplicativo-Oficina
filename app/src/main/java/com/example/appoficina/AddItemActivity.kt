@@ -26,7 +26,6 @@ class AddItemActivity : AppCompatActivity() {
     private lateinit var imageView: ImageView
     private lateinit var editNome: EditText
     private lateinit var editDescricao: EditText
-    private lateinit var editEstoque: EditText
     private lateinit var btnCamera: Button
     private lateinit var btnGaleria: Button
     private lateinit var btnSalvar: Button
@@ -48,7 +47,6 @@ class AddItemActivity : AppCompatActivity() {
         imageView = findViewById(R.id.imageView)
         editNome = findViewById(R.id.editNome)
         editDescricao = findViewById(R.id.editDescricao)
-        editEstoque = findViewById(R.id.editEstoque)
         btnCamera = findViewById(R.id.btnCamera)
         btnGaleria = findViewById(R.id.btnGaleria)
         btnSalvar = findViewById(R.id.btnSalvar)
@@ -209,27 +207,18 @@ class AddItemActivity : AppCompatActivity() {
     private fun saveItem() {
         val nome = editNome.text.toString().trim()
         val descricao = editDescricao.text.toString().trim()
-        val estoqueStr = editEstoque.text.toString().trim()
 
-        if (nome.isEmpty() || descricao.isEmpty() || estoqueStr.isEmpty()) {
+        if (nome.isEmpty() || descricao.isEmpty()) {
             Toast.makeText(this, "Preencha todos os campos", Toast.LENGTH_SHORT).show()
             return
         }
 
-        val estoque = estoqueStr.toIntOrNull()
-
-        if (estoque == null) {
-            Toast.makeText(this, "Preço e estoque devem ser números válidos", Toast.LENGTH_SHORT)
-                .show()
-            return
-        }
 
         val item = Item(
             id = System.currentTimeMillis().toInt(),
             nome = nome,
             descricao = descricao,
-            estoque = estoque,
-            imagePath = currentPhotoPath, // Corrected from imageUrl to imagePath
+            imagePath = currentPhotoPath,
         )
 
         // Salvar no Firebase
