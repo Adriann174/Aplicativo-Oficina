@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
@@ -17,7 +18,8 @@ import androidx.core.content.FileProvider
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 class AddItemActivity : AppCompatActivity() {
 
@@ -26,10 +28,12 @@ class AddItemActivity : AppCompatActivity() {
     private lateinit var editDescricao: EditText
     private lateinit var editEstoque: EditText
     private lateinit var btnCamera: Button
+    private lateinit var btnGaleria: Button
     private lateinit var btnSalvar: Button
     private lateinit var btnVoltar: ImageView
     private var currentPhotoPath: String? = null
     private val REQUEST_IMAGE_CAPTURE = 1
+    private val REQUEST_IMAGE_GALLERY = 2
     private val REQUEST_PERMISSION_CAMERA = 100
     private val REQUEST_PERMISSION_STORAGE = 101
 
@@ -40,31 +44,34 @@ class AddItemActivity : AppCompatActivity() {
         initViews()
         setupClickListeners()
     }
-
     private fun initViews() {
         imageView = findViewById(R.id.imageView)
         editNome = findViewById(R.id.editNome)
         editDescricao = findViewById(R.id.editDescricao)
         editEstoque = findViewById(R.id.editEstoque)
         btnCamera = findViewById(R.id.btnCamera)
+        btnGaleria = findViewById(R.id.btnGaleria)
         btnSalvar = findViewById(R.id.btnSalvar)
         btnVoltar = findViewById<ImageView>(R.id.btnVoltar)
-
     }
 
     private fun setupClickListeners() {
         btnCamera.setOnClickListener {
-            if (checkCameraPermission()) {
+            if (checkCameraPermission() && checkStoragePermission()) {
                 dispatchTakePictureIntent()
             } else {
                 requestCameraPermission()
+                requestStoragePermission()
             }
         }
 
-
-
-
-
+        btnGaleria.setOnClickListener {
+            if (checkStoragePermission()) {
+                dispatchGalleryIntent()
+            } else {
+                requestStoragePermission()
+            }
+        }
 
         btnVoltar.setOnClickListener {
             finish()
@@ -72,9 +79,9 @@ class AddItemActivity : AppCompatActivity() {
 
         btnSalvar.setOnClickListener {
             saveItem()
+            finish()
         }
     }
-
 
     private fun checkCameraPermission(): Boolean {
         return ContextCompat.checkSelfPermission(
@@ -83,6 +90,20 @@ class AddItemActivity : AppCompatActivity() {
         ) == PackageManager.PERMISSION_GRANTED
     }
 
+    private fun checkStoragePermission(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun requestStoragePermission() {
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+            REQUEST_PERMISSION_STORAGE
+        )
+    }
     private fun requestCameraPermission() {
         ActivityCompat.requestPermissions(
             this,
@@ -112,6 +133,17 @@ class AddItemActivity : AppCompatActivity() {
         }
     }
 
+    private fun dispatchGalleryIntent() {
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        intent.type = "image/*"
+        startActivityForResult(intent, REQUEST_IMAGE_GALLERY)
+    }
+
+    private fun dispatchSelectPictureIntent() {
+        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
+    }
+
     @Throws(IOException::class)
     private fun createImageFile(): File {
         val timeStamp: String =
@@ -122,12 +154,39 @@ class AddItemActivity : AppCompatActivity() {
         }
     }
 
+    private fun copyImageToAppDirectory(sourceUri: Uri): String? {
+        return try {
+            val inputStream = contentResolver.openInputStream(sourceUri)
+            val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+            val storageDir: File = getExternalFilesDir("Pictures")!!
+            val outputFile = File(storageDir, "JPEG_${timeStamp}.jpg")
+            
+            inputStream?.use { input ->
+                outputFile.outputStream().use { output ->
+                    input.copyTo(output)
+                }
+            }
+            
+            outputFile.absolutePath
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            currentPhotoPath?.let { path ->
+        currentPhotoPath?.let { path ->
                 val imageUri = Uri.fromFile(File(path))
                 imageView.setImageURI(imageUri)
+            }
+        } else if (requestCode == REQUEST_IMAGE_GALLERY && resultCode == RESULT_OK && data != null) {
+            val selectedImageUri = data.data
+            selectedImageUri?.let { uri ->
+                // Copiar imagem da galeria para o diretório do app
+                currentPhotoPath = copyImageToAppDirectory(uri)
+                imageView.setImageURI(uri)
             }
         }
     }
@@ -173,15 +232,25 @@ class AddItemActivity : AppCompatActivity() {
             imagePath = currentPhotoPath, // Corrected from imageUrl to imagePath
         )
 
-        val resultIntent = Intent().apply {
-            putExtra(EXTRA_ITEM, item)
-        }
-        setResult(RESULT_OK, resultIntent)
-        finish()
+        // Salvar no Firebase
+        FirebaseRepository.salvarItem(
+            item = item,
+            onSuccess = {
+                Toast.makeText(this, "Item salvo com sucesso!", Toast.LENGTH_SHORT).show()
+                val resultIntent = Intent().apply {
+                    putExtra(EXTRA_ITEM, item)
+                }
+                setResult(RESULT_OK, resultIntent)
+                finish()
+            },
+            onFailure = { exception ->
+                Toast.makeText(this, "Erro ao salvar: ${exception.message}", Toast.LENGTH_SHORT).show()
+            }
+        )
     }
 
     companion object {
         const val EXTRA_ITEM = "extra_item"
     }
-
 }
+

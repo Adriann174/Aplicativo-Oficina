@@ -28,7 +28,7 @@
             android:id="@+id/txtNomeCarrinho"
             android:layout_width="wrap_content"
             android:textStyle="bold"
-            android:maxLines="@integer/material_motion_duration_long_1"
+            android:maxLines="1"
             android:layout_height="wrap_content"
             android:text="Nome do item"
             android:textColor="@color/text_primary"
@@ -39,7 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:maxLines="@integer/material_motion_duration_long_1"
+            android:maxLines="2"
             android:text="Descrição do item"
             android:textColor="@color/text_secondary"
             android:textSize="13sp" />

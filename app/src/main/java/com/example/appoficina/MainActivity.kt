@@ -25,7 +25,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
         viewModel = ViewModelProvider(this).get(CarrinhoViewModel::class.java)
 
         val listaItens = mutableListOf<Item>()
@@ -49,6 +48,9 @@ class MainActivity : AppCompatActivity() {
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerEstoque)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = adapter
+
+        // Carregar dados do Firebase
+        carregarDadosFirebase()
 
         val bottom = findViewById<BottomNavigationView>(R.id.bottomNav)
         val cartBadge: BadgeDrawable = bottom.getOrCreateBadge(R.id.nav_pedidos)
@@ -105,6 +107,23 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "Item atualizado com sucesso", Toast.LENGTH_SHORT).show()
         }
     }
+
+    private fun carregarDadosFirebase() {
+        FirebaseRepository.buscarTodosItens(
+            onSuccess = { items ->
+                adapter.updateList(items.toMutableList())
+                Toast.makeText(this, "Dados carregados com sucesso!", Toast.LENGTH_SHORT).show()
+            },
+            onFailure = { exception ->
+                Toast.makeText(this, "Erro ao carregar dados: ${exception.message}", Toast.LENGTH_SHORT).show()
+            }
+        )
+    }
+
+
+
+
+
 
     companion object {
         private const val REQ_ADD_ITEM = 2001

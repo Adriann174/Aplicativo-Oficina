@@ -62,8 +62,7 @@ class CarrinhoActivity : AppCompatActivity() {
             when (item.itemId) {
                 R.id.nav_pedidos -> true
                 R.id.nav_home -> {
-                    startActivity(Intent(this, MainActivity::class.java))
-                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+                    finish()
                     true
                 }
 

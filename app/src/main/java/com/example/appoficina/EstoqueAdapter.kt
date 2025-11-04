@@ -73,6 +73,13 @@ class EstoqueAdapter(
             notifyDataSetChanged()
         }
     }
+
+    fun updateList(newItems: List<Item>) {
+        originalItens.clear()
+        originalItens.addAll(newItems)
+        filteredItens = originalItens
+        notifyDataSetChanged()
+    }
 }
 
 
