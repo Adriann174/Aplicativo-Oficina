@@ -110,7 +110,7 @@ class CarrinhoActivity : AppCompatActivity() {
         dir?.mkdirs()
 
         FileOutputStream(file).use { fos ->
-            fos.write("ID,Nome,Descricao,Quantidade\n".toByteArray())
+            fos.write("ID,Nome,Descricao,Estoque,Quantidade\n".toByteArray())
             items.forEach { item ->
                 val nome = item.nome.replace('"', '\'')
                 val descricao = item.descricao.replace('"', '\'')
