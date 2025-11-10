@@ -17,7 +17,8 @@ object FirebaseRepository {
             "nome" to item.nome,
             "descricao" to item.descricao,
             "imagePath" to item.imagePath,
-            "quantidade" to item.quantidade
+            "quantidade" to item.quantidade,
+            "barcode" to item.barcode
         )
         
         db.collection(COLLECTION_ITEMS)
@@ -103,11 +104,37 @@ object FirebaseRepository {
                         nome = document.getString("nome") ?: "",
                         descricao = document.getString("descricao") ?: "",
                         imagePath = document.getString("imagePath"),
-                        quantidade = document.getLong("quantidade")?.toInt() ?: 1
+                        quantidade = document.getLong("quantidade")?.toInt() ?: 1,
+                        barcode = document.getString("barcode")
                     )
                     items.add(item)
                 }
                 onChange(items)
             }
+    }
+
+    // Buscar item por código de barras
+    fun buscarItemPorBarcode(barcode: String, onSuccess: (Item?) -> Unit, onFailure: (Exception) -> Unit) {
+        db.collection(COLLECTION_ITEMS)
+            .whereEqualTo("barcode", barcode)
+            .limit(1)
+            .get()
+            .addOnSuccessListener { snapshot ->
+                val doc = snapshot.documents.firstOrNull()
+                if (doc != null) {
+                    val item = Item(
+                        id = doc.getLong("id")?.toInt() ?: 0,
+                        nome = doc.getString("nome") ?: "",
+                        descricao = doc.getString("descricao") ?: "",
+                        imagePath = doc.getString("imagePath"),
+                        quantidade = doc.getLong("quantidade")?.toInt() ?: 1,
+                        barcode = doc.getString("barcode")
+                    )
+                    onSuccess(item)
+                } else {
+                    onSuccess(null)
+                }
+            }
+            .addOnFailureListener { e -> onFailure(e) }
     }
 }

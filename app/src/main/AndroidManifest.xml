@@ -51,6 +51,10 @@
         <activity
             android:name=".MainActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".ScanBarcodeActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

@@ -29,12 +29,15 @@ class AddItemActivity : AppCompatActivity() {
     private lateinit var btnCamera: Button
     private lateinit var btnGaleria: Button
     private lateinit var btnSalvar: Button
+    private lateinit var btnScanBarcode: Button
     private lateinit var btnVoltar: ImageView
     private var currentPhotoPath: String? = null
+    private var currentBarcode: String? = null
     private val REQUEST_IMAGE_CAPTURE = 1
     private val REQUEST_IMAGE_GALLERY = 2
     private val REQUEST_PERMISSION_CAMERA = 100
     private val REQUEST_PERMISSION_STORAGE = 101
+    private val REQUEST_SCAN_BARCODE = 301
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +52,7 @@ class AddItemActivity : AppCompatActivity() {
         editDescricao = findViewById(R.id.editDescricao)
         btnCamera = findViewById(R.id.btnCamera)
         btnGaleria = findViewById(R.id.btnGaleria)
+        btnScanBarcode = findViewById(R.id.btnScanBarcode)
         btnSalvar = findViewById(R.id.btnSalvar)
         btnVoltar = findViewById<ImageView>(R.id.btnVoltar)
     }
@@ -75,11 +79,18 @@ class AddItemActivity : AppCompatActivity() {
             finish()
         }
 
+        btnScanBarcode.setOnClickListener {
+            Toast.makeText(this, "Abrindo scanner...", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, ScanBarcodeActivity::class.java)
+            startActivityForResult(intent, REQUEST_SCAN_BARCODE)
+        }
+
         btnSalvar.setOnClickListener {
             saveItem()
             finish()
         }
     }
+
 
     private fun checkCameraPermission(): Boolean {
         return ContextCompat.checkSelfPermission(
@@ -186,6 +197,19 @@ class AddItemActivity : AppCompatActivity() {
                 currentPhotoPath = copyImageToAppDirectory(uri)
                 imageView.setImageURI(uri)
             }
+        } else if (requestCode == REQUEST_SCAN_BARCODE && resultCode == RESULT_OK) {
+            val raw = data?.getStringExtra("barcode_raw")
+            currentBarcode = raw
+            val scannedItem = data?.getSerializableExtra("barcode_item") as? Item
+            if (scannedItem != null) {
+                editNome.setText(scannedItem.nome)
+                editDescricao.setText(scannedItem.descricao)
+                Toast.makeText(this, "Produto encontrado pelo código", Toast.LENGTH_SHORT).show()
+            } else if (!raw.isNullOrEmpty()) {
+                Toast.makeText(this, "Código capturado: $raw", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "Nenhum código capturado", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -219,6 +243,7 @@ class AddItemActivity : AppCompatActivity() {
             nome = nome,
             descricao = descricao,
             imagePath = currentPhotoPath,
+            barcode = currentBarcode,
         )
 
         // Salvar no Firebase
