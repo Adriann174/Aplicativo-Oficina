@@ -82,8 +82,7 @@
             app:chipStrokeColor="@color/metal_grey"
             app:chipStrokeWidth="1dp"
             app:chipIcon="@drawable/ic_barcode"
-            app:chipIconTint="@color/text_primary"
-            app:textColor="@color/text_primary" />
+            app:chipIconTint="@color/text_primary"/>
 
         <Button
             android:id="@+id/btnAdicionar"

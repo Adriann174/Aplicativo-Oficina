@@ -26,14 +26,20 @@
                 app:tint="#000000" />
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/imageView"
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            app:cardElevation="@dimen/cardview_default_radius"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:background="@color/metal_grey"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_image" />
+            app:cardCornerRadius="12dp"
+            app:cardBackgroundColor="@color/metal_grey">
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_image" />
+        </com.google.android.material.card.MaterialCardView>
 
         <Button
             android:id="@+id/btnCamera"
@@ -61,12 +67,9 @@
 
         <TextView
             android:id="@+id/txtBarcode"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            android:text="Código de barras: —"
-            android:textColor="@color/text_primary"
-            android:textSize="14sp" />
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -83,20 +86,27 @@
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/editNome"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/inputNomeLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                android:background="@drawable/glass_input"
-                android:hint="Digite o nome do produto"
-                android:inputType="text"
-                android:maxLines="1"
-                android:lines="1"
-                android:padding="12dp"
-                android:textColor="@color/text_primary"
-                android:textColorHint="@color/text_secondary"
-                android:textSize="16sp" />
+                app:endIconMode="custom"
+                app:endIconDrawable="@drawable/ic_barcode"
+                app:endIconContentDescription="Escanear código de barras">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editNome"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Digite o nome do produto"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:lines="1"
+                    android:padding="12dp"
+                    android:textColor="@color/text_primary"
+                    android:textColorHint="@color/text_secondary"
+                    android:textSize="16sp" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Descrição -->
             <TextView
@@ -108,20 +118,23 @@
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/editDescricao"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/inputDescricaoLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/glass_input"
-                android:hint="Digite a descrição do produto"
-                android:inputType="textMultiLine"
-                android:maxLines="3"
-                android:lines="2"
-                android:padding="12dp"
-                android:textColor="@color/text_primary"
-                android:textColorHint="@color/text_secondary"
-                android:textSize="16sp" />
+                android:layout_marginBottom="16dp">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editDescricao"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Digite a descrição do produto"
+                    android:inputType="textMultiLine"
+                    android:maxLines="3"
+                    android:lines="2"
+                    android:textColor="@color/text_primary"
+                    android:textColorHint="@color/text_secondary"
+                    android:textSize="16sp" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Preço e Estoque em linha -->
             <LinearLayout

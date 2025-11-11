@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import com.google.android.material.textfield.TextInputLayout
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -29,7 +30,7 @@ class AddItemActivity : AppCompatActivity() {
     private lateinit var btnCamera: Button
     private lateinit var btnGaleria: Button
     private lateinit var btnSalvar: Button
-    private lateinit var btnScanBarcode: Button
+    private lateinit var inputNomeLayout: TextInputLayout
     private lateinit var btnVoltar: ImageView
     private var currentPhotoPath: String? = null
     private var currentBarcode: String? = null
@@ -52,7 +53,7 @@ class AddItemActivity : AppCompatActivity() {
         editDescricao = findViewById(R.id.editDescricao)
         btnCamera = findViewById(R.id.btnCamera)
         btnGaleria = findViewById(R.id.btnGaleria)
-        btnScanBarcode = findViewById(R.id.btnScanBarcode)
+        inputNomeLayout = findViewById(R.id.inputNomeLayout)
         btnSalvar = findViewById(R.id.btnSalvar)
         btnVoltar = findViewById<ImageView>(R.id.btnVoltar)
     }
@@ -79,7 +80,7 @@ class AddItemActivity : AppCompatActivity() {
             finish()
         }
 
-        btnScanBarcode.setOnClickListener {
+        inputNomeLayout.setEndIconOnClickListener {
             Toast.makeText(this, "Abrindo scanner...", Toast.LENGTH_SHORT).show()
             val intent = Intent(this, ScanBarcodeActivity::class.java)
             startActivityForResult(intent, REQUEST_SCAN_BARCODE)
@@ -169,13 +170,13 @@ class AddItemActivity : AppCompatActivity() {
             val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
             val storageDir: File = getExternalFilesDir("Pictures")!!
             val outputFile = File(storageDir, "JPEG_${timeStamp}.jpg")
-            
+
             inputStream?.use { input ->
                 outputFile.outputStream().use { output ->
                     input.copyTo(output)
                 }
             }
-            
+
             outputFile.absolutePath
         } catch (e: Exception) {
             e.printStackTrace()
@@ -186,7 +187,7 @@ class AddItemActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-        currentPhotoPath?.let { path ->
+            currentPhotoPath?.let { path ->
                 val imageUri = Uri.fromFile(File(path))
                 imageView.setImageURI(imageUri)
             }
@@ -200,13 +201,29 @@ class AddItemActivity : AppCompatActivity() {
         } else if (requestCode == REQUEST_SCAN_BARCODE && resultCode == RESULT_OK) {
             val raw = data?.getStringExtra("barcode_raw")
             currentBarcode = raw
+            // Mostrar o código como ajuda abaixo do campo de nome
+            inputNomeLayout.helperText = if (!raw.isNullOrEmpty()) "Código: $raw" else null
             val scannedItem = data?.getSerializableExtra("barcode_item") as? Item
             if (scannedItem != null) {
                 editNome.setText(scannedItem.nome)
                 editDescricao.setText(scannedItem.descricao)
                 Toast.makeText(this, "Produto encontrado pelo código", Toast.LENGTH_SHORT).show()
             } else if (!raw.isNullOrEmpty()) {
-                Toast.makeText(this, "Código capturado: $raw", Toast.LENGTH_SHORT).show()
+                // Buscar automaticamente no Firestore pelo código e preencher nome/descrição
+                FirebaseRepository.buscarItemPorBarcode(raw,
+                    onSuccess = { item ->
+                        if (item != null) {
+                            editNome.setText(item.nome)
+                            editDescricao.setText(item.descricao)
+                            Toast.makeText(this, "Produto encontrado pelo código", Toast.LENGTH_SHORT).show()
+                        } else {
+                            Toast.makeText(this, "Código capturado: $raw", Toast.LENGTH_SHORT).show()
+                        }
+                    },
+                    onFailure = { e ->
+                        Toast.makeText(this, "Erro ao buscar produto: ${e.message}", Toast.LENGTH_SHORT).show()
+                    }
+                )
             } else {
                 Toast.makeText(this, "Nenhum código capturado", Toast.LENGTH_SHORT).show()
             }
