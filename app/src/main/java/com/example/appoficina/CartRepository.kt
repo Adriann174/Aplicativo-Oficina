@@ -9,10 +9,10 @@ object CartRepository {
 
     fun add(item: Item) {
         val current = _items.value ?: mutableListOf()
-        
+
         // Verificar se o item já existe no carrinho (mesmo ID)
         val existingItem = current.find { it.id == item.id }
-        
+
         if (existingItem != null) {
             // Se o item já existe, incrementar a quantidade
             existingItem.quantidade++
@@ -20,7 +20,7 @@ object CartRepository {
             // Se é um item novo, adicionar com quantidade 1
             current.add(item.copy(quantidade = 1))
         }
-        
+
         _items.value = current
     }
 
@@ -33,7 +33,7 @@ object CartRepository {
     fun clear() {
         _items.value = mutableListOf()
     }
-    
+
     fun incrementarQuantidade(item: Item) {
         val current = _items.value ?: return
         val existingItem = current.find { it.id == item.id }
@@ -42,7 +42,7 @@ object CartRepository {
             _items.value = current
         }
     }
-    
+
     fun decrementarQuantidade(item: Item) {
         val current = _items.value ?: return
         val existingItem = current.find { it.id == item.id }
@@ -53,6 +53,16 @@ object CartRepository {
                 // Se quantidade for 1, remover o item completamente
                 current.remove(it)
             }
+            _items.value = current
+        }
+    }
+
+    fun atualizarQuantidade(item: Item, novaQuantidade: Int) {
+        val current = _items.value ?: return
+        val existingItem = current.find { it.id == item.id }
+        existingItem?.let {
+            val q = if (novaQuantidade < 1) 1 else novaQuantidade
+            it.quantidade = q
             _items.value = current
         }
     }

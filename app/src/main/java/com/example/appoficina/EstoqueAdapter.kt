@@ -7,6 +7,7 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 
 class EstoqueAdapter(
     private val originalItens: MutableList<Item>,
@@ -34,11 +35,15 @@ class EstoqueAdapter(
         val item = filteredItens[position]
         holder.nome.text = item.nome
         holder.descricao.text = item.descricao
-        // Carregar imagem se existir
         item.imagePath?.let { path ->
             val file = java.io.File(path)
             if (file.exists()) {
-                holder.img.setImageURI(android.net.Uri.fromFile(file))
+                holder.img.load(file) {
+                    placeholder(R.drawable.ic_image)
+                    crossfade(true)
+                }
+            } else {
+                holder.img.setImageResource(R.drawable.ic_image)
             }
         }
         
@@ -48,6 +53,8 @@ class EstoqueAdapter(
     }
 
     override fun getItemCount() = filteredItens.size
+
+    override fun getItemId(position: Int): Long = filteredItens[position].id.toLong()
 
     fun getItemAt(position: Int): Item = filteredItens[position]
 

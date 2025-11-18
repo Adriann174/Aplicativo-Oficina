@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.os.Build
 import android.provider.MediaStore
 import android.util.Log
 import android.widget.Button
@@ -47,6 +48,7 @@ class AddItemActivity : AppCompatActivity() {
         initViews()
         setupClickListeners()
     }
+
     private fun initViews() {
         imageView = findViewById(R.id.imageView)
         editNome = findViewById(R.id.editNome)
@@ -60,11 +62,10 @@ class AddItemActivity : AppCompatActivity() {
 
     private fun setupClickListeners() {
         btnCamera.setOnClickListener {
-            if (checkCameraPermission() && checkStoragePermission()) {
+            if (checkCameraPermission()) {
                 dispatchTakePictureIntent()
             } else {
                 requestCameraPermission()
-                requestStoragePermission()
             }
         }
 
@@ -84,6 +85,7 @@ class AddItemActivity : AppCompatActivity() {
             Toast.makeText(this, "Abrindo scanner...", Toast.LENGTH_SHORT).show()
             val intent = Intent(this, ScanBarcodeActivity::class.java)
             startActivityForResult(intent, REQUEST_SCAN_BARCODE)
+            requestCameraPermission()
         }
 
         btnSalvar.setOnClickListener {
@@ -101,19 +103,26 @@ class AddItemActivity : AppCompatActivity() {
     }
 
     private fun checkStoragePermission(): Boolean {
+        val permission = if (Build.VERSION.SDK_INT >= 33) {
+            Manifest.permission.READ_MEDIA_IMAGES
+        } else {
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        }
         return ContextCompat.checkSelfPermission(
             this,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
+            permission
         ) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun requestStoragePermission() {
-        ActivityCompat.requestPermissions(
-            this,
-            arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-            REQUEST_PERMISSION_STORAGE
-        )
+        val permission = if (Build.VERSION.SDK_INT >= 33) {
+            Manifest.permission.READ_MEDIA_IMAGES
+        } else {
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        }
+        ActivityCompat.requestPermissions(this, arrayOf(permission), REQUEST_PERMISSION_STORAGE)
     }
+
     private fun requestCameraPermission() {
         ActivityCompat.requestPermissions(
             this,
@@ -145,14 +154,10 @@ class AddItemActivity : AppCompatActivity() {
 
     private fun dispatchGalleryIntent() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        intent.type = "image/*"
+        intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*")
         startActivityForResult(intent, REQUEST_IMAGE_GALLERY)
     }
 
-    private fun dispatchSelectPictureIntent() {
-        val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        startActivityForResult(intent, REQUEST_IMAGE_CAPTURE)
-    }
 
     @Throws(IOException::class)
     private fun createImageFile(): File {
@@ -210,18 +215,28 @@ class AddItemActivity : AppCompatActivity() {
                 Toast.makeText(this, "Produto encontrado pelo código", Toast.LENGTH_SHORT).show()
             } else if (!raw.isNullOrEmpty()) {
                 // Buscar automaticamente no Firestore pelo código e preencher nome/descrição
-                FirebaseRepository.buscarItemPorBarcode(raw,
+                FirebaseRepository.buscarItemPorBarcode(
+                    raw,
                     onSuccess = { item ->
                         if (item != null) {
                             editNome.setText(item.nome)
                             editDescricao.setText(item.descricao)
-                            Toast.makeText(this, "Produto encontrado pelo código", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                this,
+                                "Produto encontrado pelo código",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         } else {
-                            Toast.makeText(this, "Código capturado: $raw", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this, "Código capturado: $raw", Toast.LENGTH_SHORT)
+                                .show()
                         }
                     },
                     onFailure = { e ->
-                        Toast.makeText(this, "Erro ao buscar produto: ${e.message}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            this,
+                            "Erro ao buscar produto: ${e.message}",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 )
             } else {
@@ -275,7 +290,8 @@ class AddItemActivity : AppCompatActivity() {
                 finish()
             },
             onFailure = { exception ->
-                Toast.makeText(this, "Erro ao salvar: ${exception.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Erro ao salvar: ${exception.message}", Toast.LENGTH_SHORT)
+                    .show()
             }
         )
     }

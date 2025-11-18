@@ -73,4 +73,5 @@ dependencies {
 
     // ML Kit Barcode Scanning
     implementation("com.google.mlkit:barcode-scanning:17.2.0")
+    implementation("io.coil-kt:coil:2.6.0")
 }
