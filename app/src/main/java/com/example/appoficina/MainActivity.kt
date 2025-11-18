@@ -46,7 +46,6 @@ class MainActivity : AppCompatActivity() {
 
         adapter = EstoqueAdapter(listaItens, onAddClick = { item ->
             viewModel.adicionarItem(item)
-            Toast.makeText(this, "${item.nome} adicionado ao carrinho", Toast.LENGTH_SHORT).show()
         }, onItemClick = { item ->
             val intent = Intent(this, DetalhesActivity::class.java)
             intent.putExtra(DetalhesActivity.EXTRA_ITEM, item)
@@ -60,7 +59,10 @@ class MainActivity : AppCompatActivity() {
         })
 
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerEstoque)
+        adapter.setHasStableIds(true)
         recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.setHasFixedSize(true)
+        recyclerView.setItemViewCacheSize(20)
         recyclerView.adapter = adapter
 
         // Swipe para direita para excluir item do estoque

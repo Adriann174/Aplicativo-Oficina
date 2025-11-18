@@ -8,12 +8,15 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.chip.Chip
 import java.io.File
 
 class DetalhesActivity : AppCompatActivity() {
 
     private lateinit var viewModel: CarrinhoViewModel
     private lateinit var item: Item
+    private lateinit var chipBarcode: Chip
+    private lateinit var barcodeActivity: ScanBarcodeActivity
 
     private lateinit var btnVoltar: ImageView
 
@@ -24,13 +27,19 @@ class DetalhesActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this).get(CarrinhoViewModel::class.java)
 
-        item = intent.getSerializableExtra(EXTRA_ITEM) as Item
+        item = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            intent.getSerializableExtra(EXTRA_ITEM, Item::class.java)!!
+        } else {
+            @Suppress("DEPRECATION")
+            intent.getSerializableExtra(EXTRA_ITEM) as Item
+        }
         setupViews()
     }
 
     private fun setupViews() {
         val imageView = findViewById<ImageView>(R.id.imageView)
         val txtNome = findViewById<TextView>(R.id.txtNome)
+        val txtCodigo = findViewById<TextView>(R.id.chipBarcode)
         val txtDescricao = findViewById<TextView>(R.id.txtDescricao)
         val btnVoltar = findViewById<ImageButton>(R.id.btnVoltar)
         val btnAdicionar = findViewById<Button>(R.id.btnAdicionar)
@@ -46,6 +55,7 @@ class DetalhesActivity : AppCompatActivity() {
 
         txtNome.text = item.nome
         txtDescricao.text = item.descricao
+        txtCodigo.text = item.barcode
         btnAdicionar.setOnClickListener {
             viewModel.adicionarItem(item)
             Toast.makeText(this, "Item adicionado ao carrinho", Toast.LENGTH_SHORT).show()
