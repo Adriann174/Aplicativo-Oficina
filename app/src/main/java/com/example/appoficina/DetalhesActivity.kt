@@ -12,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.chip.Chip
 import java.io.File
+import coil.load
+import android.net.Uri
 
 class DetalhesActivity : AppCompatActivity() {
 
@@ -47,11 +49,23 @@ class DetalhesActivity : AppCompatActivity() {
         val btnAdicionar = findViewById<Button>(R.id.btnAdicionar)
 
 
-        // Carregar imagem se existir
+        // Carregar imagem com suporte a file://, content:// e http(s)
         item.imagePath?.let { path ->
-            val file = File(path)
-            if (file.exists()) {
-                imageView.setImageURI(android.net.Uri.fromFile(file))
+            when {
+                path.startsWith("http://") || path.startsWith("https://") -> {
+                    imageView.load(path) { placeholder(R.drawable.ic_image); crossfade(true) }
+                }
+                path.startsWith("content://") || path.startsWith("file://") -> {
+                    imageView.load(Uri.parse(path)) { placeholder(R.drawable.ic_image); crossfade(true) }
+                }
+                else -> {
+                    val file = File(path)
+                    if (file.exists()) {
+                        imageView.load(file) { placeholder(R.drawable.ic_image); crossfade(true) }
+                    } else {
+                        imageView.setImageResource(R.drawable.ic_image)
+                    }
+                }
             }
         }
 

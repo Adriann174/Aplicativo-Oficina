@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import coil.load
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -40,6 +41,8 @@ class EditItemActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_item)
+
+        FirebaseRepository.setDeviceScope(this)
 
         itemToEdit = intent.getSerializableExtra(EXTRA_ITEM) as? Item
         if (itemToEdit == null) {
@@ -95,22 +98,36 @@ class EditItemActivity : AppCompatActivity() {
             editNome.setText(item.nome)
             editDescricao.setText(item.descricao)
 
-            // Carregar imagem existente se houver
+            // Carregar imagem existente se houver, suportando file://, content:// e http(s)
             item.imagePath?.let { path ->
-                val file = File(path)
-                if (file.exists()) {
-                    imageView.setImageURI(Uri.fromFile(file))
-                    currentPhotoPath = path
+                when {
+                    path.startsWith("http://") || path.startsWith("https://") -> {
+                        imageView.load(path) { placeholder(R.drawable.ic_image); crossfade(true) }
+                        currentPhotoPath = path
+                    }
+                    path.startsWith("content://") || path.startsWith("file://") -> {
+                        imageView.load(Uri.parse(path)) { placeholder(R.drawable.ic_image); crossfade(true) }
+                        currentPhotoPath = path
+                    }
+                    else -> {
+                        val file = File(path)
+                        if (file.exists()) {
+                            imageView.load(file) { placeholder(R.drawable.ic_image); crossfade(true) }
+                            currentPhotoPath = path
+                        }
+                    }
                 }
             }
         }
     }
 
     private fun checkStoragePermission(): Boolean {
-        return ContextCompat.checkSelfPermission(
-            this,
+        val permission = if (android.os.Build.VERSION.SDK_INT >= 33) {
+            Manifest.permission.READ_MEDIA_IMAGES
+        } else {
             Manifest.permission.READ_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED
+        }
+        return ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun checkCameraPermission(): Boolean {
@@ -121,23 +138,22 @@ class EditItemActivity : AppCompatActivity() {
     }
 
     private fun requestStoragePermission() {
-        ActivityCompat.requestPermissions(
-            this,
-            arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-            REQUEST_PERMISSION_STORAGE
-        )
+        val permission = if (android.os.Build.VERSION.SDK_INT >= 33) {
+            Manifest.permission.READ_MEDIA_IMAGES
+        } else {
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        }
+        ActivityCompat.requestPermissions(this, arrayOf(permission), REQUEST_PERMISSION_STORAGE)
     }
 
     private fun dispatchGalleryIntent() {
         val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        startActivityForResult(intent, REQUEST_IMAGE_GALLERY)
+        startActivityForResult(intent,REQUEST_IMAGE_GALLERY)
     }
 
     private fun requestCameraPermission() {
         ActivityCompat.requestPermissions(
-            this,
-            arrayOf(Manifest.permission.CAMERA),
-            REQUEST_PERMISSION_CAMERA
+            this, arrayOf(Manifest.permission.CAMERA), REQUEST_PERMISSION_CAMERA
         )
     }
 
@@ -151,9 +167,7 @@ class EditItemActivity : AppCompatActivity() {
                 }
                 photoFile?.also {
                     val photoURI: Uri = FileProvider.getUriForFile(
-                        this,
-                        "${packageName}.fileprovider",
-                        it
+                        this, "${packageName}.fileprovider", it
                     )
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
                     startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
@@ -176,15 +190,15 @@ class EditItemActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             currentPhotoPath?.let { path ->
-                val imageUri = Uri.fromFile(File(path))
-                imageView.setImageURI(imageUri)
+                val file = File(path)
+                imageView.load(file) { placeholder(R.drawable.ic_image); crossfade(true) }
             }
         } else if (requestCode == REQUEST_IMAGE_GALLERY && resultCode == RESULT_OK) {
             data?.data?.let { uri ->
                 val copiedImagePath = copyImageToAppDirectory(uri)
                 if (copiedImagePath != null) {
                     currentPhotoPath = copiedImagePath
-                    imageView.setImageURI(uri)
+                    imageView.load(Uri.parse(copiedImagePath)) { placeholder(R.drawable.ic_image); crossfade(true) }
                 }
             }
         }

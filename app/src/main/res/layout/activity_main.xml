@@ -18,7 +18,7 @@
             android:text="Dashboard de Estoque"
             android:textColor="@color/black"
             android:textSize="22dp"
-            android:textStyle="bold"
+            android:fontFamily="@font/inter_bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -30,6 +30,7 @@
             android:text="Gerencie seu estoque de forma eficiente"
             android:textColor="@color/text_secondary"
             android:textSize="14dp"
+            android:fontFamily="@font/inter_regular"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -38,7 +39,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="right"
-        android:layout_marginTop="-50dp"
+        android:layout_marginTop="-45dp"
         android:background="@drawable/btn_primary"
         android:backgroundTint="#E2E2E2"
         android:src="@drawable/ic_delete" />
@@ -54,8 +55,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/glass_input"
-            android:fontFamily="sans-serif-medium"
             android:hint="Search..."
+            android:fontFamily="@font/inter_regular"
             android:padding="12dp"
             android:layout_marginTop="30dp"
             android:textColor="@color/text_primary"

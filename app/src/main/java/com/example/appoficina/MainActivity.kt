@@ -17,7 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.appcompat.app.AlertDialog
-import com.google.firebase.firestore.ListenerRegistration
+// Listener do Realtime Database
 import com.google.android.material.badge.BadgeDrawable
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlin.jvm.java
@@ -27,15 +27,18 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var viewModel: CarrinhoViewModel
     private lateinit var adapter: EstoqueAdapter
-    private var itemsListener: ListenerRegistration? = null
+    private var itemsListener: FirebaseRepository.RealtimeListenerHandle? = null
     private lateinit var btnMenu: Button
     private lateinit var imgRemoverTudo: ImageButton
+    private lateinit var bottom: com.google.android.material.bottomnavigation.BottomNavigationView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        FirebaseRepository.setDeviceScope(this)
 
         imgRemoverTudo = findViewById<ImageButton>(R.id.imgRemoverTudo)
 
@@ -102,7 +105,7 @@ class MainActivity : AppCompatActivity() {
         // Carregar dados do Firebase
         carregarDadosFirebase()
 
-        val bottom = findViewById<BottomNavigationView>(R.id.bottomNav)
+        bottom = findViewById<BottomNavigationView>(R.id.bottomNav)
         val cartBadge: BadgeDrawable = bottom.getOrCreateBadge(R.id.nav_pedidos)
         cartBadge.isVisible = false
         viewModel.itensCarrinho.observe(this) { itens ->
@@ -162,13 +165,21 @@ class MainActivity : AppCompatActivity() {
             when (item.itemId) {
                 R.id.nav_home -> true
                 R.id.nav_pedidos -> {
-                    val intent = Intent(this, CarrinhoActivity::class.java)
+                    val intent = Intent(this, CarrinhoActivity::class.java).apply {
+                        addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                    }
                     startActivity(intent)
-
+                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
                     true
                 }
 
                 else -> false
+            }
+        }
+
+        bottom.setOnItemReselectedListener { item ->
+            if (item.itemId == R.id.nav_home) {
+                recyclerView.smoothScrollToPosition(0)
             }
         }
     }
@@ -193,6 +204,14 @@ class MainActivity : AppCompatActivity() {
         itemsListener = null
     }
 
+    override fun onResume() {
+        super.onResume()
+        // Garantir que, ao retornar da tela de pedidos, a seleção fique em Home
+        if (::bottom.isInitialized) {
+            bottom.selectedItemId = R.id.nav_home
+        }
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQ_ADD_ITEM && resultCode == RESULT_OK && data != null) {
@@ -210,12 +229,11 @@ class MainActivity : AppCompatActivity() {
         FirebaseRepository.buscarTodosItens(
             onSuccess = { items ->
                 adapter.updateList(items.toMutableList())
-                Toast.makeText(this, "Dados carregados com sucesso!", Toast.LENGTH_SHORT).show()
             },
             onFailure = { exception ->
                 Toast.makeText(
                     this,
-                    "Erro ao carregar dados: ${exception.message}",
+                    "Erro ao carregar lista: ${exception.message}",
                     Toast.LENGTH_SHORT
                 ).show()
             }

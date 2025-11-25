@@ -144,10 +144,17 @@ class CarrinhoActivity : AppCompatActivity() {
                 R.id.nav_pedidos -> true
                 R.id.nav_home -> {
                     finish()
+                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
                     true
                 }
 
                 else -> false
+            }
+        }
+
+        bottomNavigationView.setOnItemReselectedListener { item: MenuItem ->
+            if (item.itemId == R.id.nav_pedidos) {
+                recycler.smoothScrollToPosition(0)
             }
         }
     }

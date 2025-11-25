@@ -11,17 +11,8 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textSize="20dp"
-            android:layout_gravity="center"
-            android:textColor="@color/black"
-            android:text="Adicionar produto"/>
-
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="start">
 
@@ -54,21 +45,22 @@
 
             <Button
                 android:id="@+id/btnCamera"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_marginTop="12dp"
                 android:textStyle="bold"
                 android:background="@drawable/btn_secondary"
                 android:text="Tirar Foto"
+                android:fontFamily="@font/inter_bold"
                 android:textColor="@color/white"
                 android:textSize="16sp" />
 
             <Button
                 android:id="@+id/btnGaleria"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:textStyle="bold"
+                android:fontFamily="@font/inter_bold"
                 android:background="@drawable/btn_secondary"
                 android:text="Selecionar da Galeria"
                 android:textColor="@color/white"
@@ -89,7 +81,7 @@
                 android:text="Nome do Produto"
                 android:textColor="@color/text_primary"
                 android:textSize="16sp"
-                android:textStyle="bold"
+                android:fontFamily="@font/inter_bold"
                 android:layout_marginBottom="8dp" />
 
             <EditText
@@ -100,6 +92,7 @@
                 android:hint="Digite o nome do produto"
                 android:padding="12dp"
                 android:maxLines="1"
+                android:fontFamily="@font/inter_regular"
                 android:inputType="text"
                 android:textColor="@color/text_primary"
                 android:textColorHint="@color/text_secondary"
@@ -113,7 +106,7 @@
                 android:text="Descrição"
                 android:textColor="@color/text_primary"
                 android:textSize="16sp"
-                android:textStyle="bold"
+                android:fontFamily="@font/inter_bold"
                 android:layout_marginBottom="8dp" />
 
             <EditText
@@ -124,6 +117,7 @@
                 android:hint="Digite a descrição do produto"
                 android:padding="12dp"
                 android:maxLines="5"
+                android:fontFamily="@font/inter_regular"
                 android:textColor="@color/text_primary"
                 android:textColorHint="@color/text_secondary"
                 android:textSize="16sp"
@@ -149,7 +143,7 @@
             android:text="Salvar Alterações"
             android:textColor="@color/white"
             android:textSize="16sp"
-            android:textStyle="bold" />
+            android:fontFamily="@font/inter_bold" />
 
     </LinearLayout>
 

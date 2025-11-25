@@ -8,15 +8,15 @@
     android:background="@drawable/glass_input"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:padding="12dp">
+    android:padding="5dp">
 
 
     <ImageView
         android:id="@+id/imgCarrinho"
         android:layout_width="72dp"
         android:layout_height="72dp"
+        android:scaleType="centerCrop"
         android:layout_marginEnd="12dp"
-        android:background="#EDE7E1"
         android:src="@drawable/ic_image" />
 
     <LinearLayout
@@ -28,11 +28,11 @@
         <TextView
             android:id="@+id/txtNomeCarrinho"
             android:layout_width="wrap_content"
-            android:textStyle="bold"
             android:maxLines="2"
+            android:fontFamily="@font/inter_bold"
             android:layout_height="wrap_content"
             android:text="Nome do item"
-            android:textColor="@color/text_primary"
+            android:textColor="#B40C0C"
             android:textSize="14sp" />
 
         <TextView
@@ -41,8 +41,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:maxLines="2"
+            android:fontFamily="@font/inter_regular"
             android:text="Descrição do item"
-            android:textColor="@color/text_secondary"
+            android:textColor="#686868"
             android:textSize="13sp" />
 
     </LinearLayout>

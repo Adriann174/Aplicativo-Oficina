@@ -26,32 +26,26 @@
                 app:tint="#000000" />
         </LinearLayout>
 
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            app:cardElevation="@dimen/cardview_default_radius"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="12dp"
-            app:cardBackgroundColor="@color/metal_grey">
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ic_image" />
-        </com.google.android.material.card.MaterialCardView>
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="250dp"
+            android:layout_gravity="center"
+            android:adjustViewBounds="true"
+            android:src="@drawable/ic_image" />
 
         <Button
             android:id="@+id/btnCamera"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginTop="10dp"
             android:layout_marginBottom="8dp"
             android:background="@drawable/btn_primary"
             android:text="Tirar Foto"
             android:textColor="@color/white"
             android:textSize="16sp"
-            android:textStyle="bold" />
+            android:fontFamily="@font/inter_bold"/>
 
         <Button
             android:id="@+id/btnGaleria"
@@ -63,7 +57,7 @@
             android:text="Selecionar da Galeria"
             android:textColor="@color/white"
             android:textSize="16sp"
-            android:textStyle="bold" />
+            android:fontFamily="@font/inter_bold" />
 
         <TextView
             android:id="@+id/txtBarcode"
@@ -84,24 +78,27 @@
                 android:text="Nome do Produto"
                 android:textColor="@color/text_primary"
                 android:textSize="16sp"
-                android:textStyle="bold" />
+                android:fontFamily="@font/inter_bold" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/inputNomeLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
-                app:endIconMode="custom"
+                android:orientation="horizontal"
+                app:endIconContentDescription="Escanear código de barras"
                 app:endIconDrawable="@drawable/ic_barcode"
-                app:endIconContentDescription="Escanear código de barras">
+                app:endIconMode="custom">
+
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editNome"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/inter_regular"
                     android:hint="Digite o nome do produto"
                     android:inputType="text"
-                    android:maxLines="1"
                     android:lines="1"
+                    android:maxLines="1"
                     android:padding="12dp"
                     android:textColor="@color/text_primary"
                     android:textColorHint="@color/text_secondary"
@@ -116,21 +113,23 @@
                 android:text="Descrição"
                 android:textColor="@color/text_primary"
                 android:textSize="16sp"
-                android:textStyle="bold" />
+                android:fontFamily="@font/inter_bold"  />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/inputDescricaoLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp">
+
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editDescricao"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Digite a descrição do produto"
                     android:inputType="textMultiLine"
-                    android:maxLines="3"
                     android:lines="2"
+                    android:fontFamily="@font/inter_regular"
+                    android:maxLines="3"
                     android:textColor="@color/text_primary"
                     android:textColorHint="@color/text_secondary"
                     android:textSize="16sp" />
@@ -140,18 +139,19 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"/>
+                android:orientation="horizontal" />
 
             <Button
                 android:id="@+id/btnSalvar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
+                android:layout_gravity="center"
                 android:background="@drawable/btn_primary"
                 android:text="Salvar Item"
                 android:textColor="@color/white"
                 android:textSize="16sp"
-                android:textStyle="bold" />
+               android:fontFamily="@font/inter_bold" />
 
         </LinearLayout>
 

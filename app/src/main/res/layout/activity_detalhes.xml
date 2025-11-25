@@ -27,24 +27,14 @@
                 app:tint="@color/text_primary" />
         </LinearLayout>
 
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="4dp"
-            app:strokeColor="@color/metal_grey"
-            app:strokeWidth="1dp">
 
             <ImageView
                 android:id="@+id/imageView"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_width="wrap_content"
+                android:layout_height="250dp"
                 android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
+                android:layout_gravity="center"
                 android:src="@drawable/ic_image" />
-        </com.google.android.material.card.MaterialCardView>
 
         <TextView
             android:id="@+id/txtNome"
@@ -52,16 +42,17 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:text="Nome do Item"
+            android:fontFamily="@font/inter_bold"
             android:textColor="@color/text_primary"
-            android:textSize="22sp"
-            android:textStyle="bold" />
+            android:textSize="22sp" />
 
         <TextView
             android:id="@+id/txtDescricao"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
-            android:lineSpacingExtra="4dp"
+            android:lineSpacingExtra="2dp"
+            android:fontFamily="@font/inter_regular"
             android:text="Descrição do item. Texto maior para explicar características, materiais e observações importantes."
             android:textColor="@color/text_secondary"
             android:textSize="16sp" />
@@ -78,6 +69,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:text="Código: —"
+            android:fontFamily="@font/inter_regular"
             app:chipBackgroundColor="@color/metal_grey"
             app:chipStrokeColor="@color/metal_grey"
             app:chipStrokeWidth="1dp"
@@ -88,14 +80,14 @@
             android:id="@+id/btnAdicionar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/btn_primary"
-            android:paddingVertical="12dp"
-            android:layout_gravity="bottom"
+            android:layout_gravity="bottom|center"
             android:layout_marginTop="24dp"
+            android:background="@drawable/btn_primary"
+            android:fontFamily="@font/inter_bold"
+            android:paddingVertical="12dp"
             android:text="Adicionar ao Carrinho"
             android:textColor="@color/white"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:textSize="16sp" />
 
     </LinearLayout>
 </ScrollView>

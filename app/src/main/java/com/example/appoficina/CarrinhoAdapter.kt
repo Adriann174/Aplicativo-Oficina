@@ -56,14 +56,31 @@ class CarrinhoAdapter(
 
 
         item.imagePath?.let { path ->
-            val file = java.io.File(path)
-            if (file.exists()) {
-                holder.img.load(file) {
-                    placeholder(R.drawable.ic_image)
-                    crossfade(true)
+            val lower = path.lowercase()
+            when {
+                lower.startsWith("http") -> {
+                    holder.img.load(path) {
+                        placeholder(R.drawable.ic_image)
+                        crossfade(true)
+                    }
                 }
-            } else {
-                holder.img.setImageResource(R.drawable.ic_image)
+                lower.startsWith("content://") || lower.startsWith("file://") -> {
+                    holder.img.load(android.net.Uri.parse(path)) {
+                        placeholder(R.drawable.ic_image)
+                        crossfade(true)
+                    }
+                }
+                else -> {
+                    val file = java.io.File(path)
+                    if (file.exists()) {
+                        holder.img.load(file) {
+                            placeholder(R.drawable.ic_image)
+                            crossfade(true)
+                        }
+                    } else {
+                        holder.img.setImageResource(R.drawable.ic_image)
+                    }
+                }
             }
         }
 
