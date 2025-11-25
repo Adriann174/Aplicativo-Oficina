@@ -83,9 +83,11 @@ class AddItemActivity : AppCompatActivity() {
 
         inputNomeLayout.setEndIconOnClickListener {
             Toast.makeText(this, "Abrindo scanner...", Toast.LENGTH_SHORT).show()
-            val intent = Intent(this, ScanBarcodeActivity::class.java)
+             val intent = Intent(this, ScanBarcodeActivity::class.java)
             startActivityForResult(intent, REQUEST_SCAN_BARCODE)
+            startActivityForResult(intent, REQUEST_PERMISSION_CAMERA)
             requestCameraPermission()
+            dispatchTakePictureIntent()
         }
 
         btnSalvar.setOnClickListener {
@@ -206,42 +208,9 @@ class AddItemActivity : AppCompatActivity() {
         } else if (requestCode == REQUEST_SCAN_BARCODE && resultCode == RESULT_OK) {
             val raw = data?.getStringExtra("barcode_raw")
             currentBarcode = raw
-            // Mostrar o código como ajuda abaixo do campo de nome
             inputNomeLayout.helperText = if (!raw.isNullOrEmpty()) "Código: $raw" else null
             val scannedItem = data?.getSerializableExtra("barcode_item") as? Item
-            if (scannedItem != null) {
-                editNome.setText(scannedItem.nome)
-                editDescricao.setText(scannedItem.descricao)
-                Toast.makeText(this, "Produto encontrado pelo código", Toast.LENGTH_SHORT).show()
-            } else if (!raw.isNullOrEmpty()) {
-                // Buscar automaticamente no Firestore pelo código e preencher nome/descrição
-                FirebaseRepository.buscarItemPorBarcode(
-                    raw,
-                    onSuccess = { item ->
-                        if (item != null) {
-                            editNome.setText(item.nome)
-                            editDescricao.setText(item.descricao)
-                            Toast.makeText(
-                                this,
-                                "Produto encontrado pelo código",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        } else {
-                            Toast.makeText(this, "Código capturado: $raw", Toast.LENGTH_SHORT)
-                                .show()
-                        }
-                    },
-                    onFailure = { e ->
-                        Toast.makeText(
-                            this,
-                            "Erro ao buscar produto: ${e.message}",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                )
-            } else {
-                Toast.makeText(this, "Nenhum código capturado", Toast.LENGTH_SHORT).show()
-            }
+
         }
     }
 

@@ -31,7 +31,8 @@ class CarrinhoAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_carrinho, parent, false)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.item_carrinho, parent, false)
         return ViewHolder(view)
     }
 
@@ -53,6 +54,7 @@ class CarrinhoAdapter(
             }
         })
 
+
         item.imagePath?.let { path ->
             val file = java.io.File(path)
             if (file.exists()) {
@@ -64,15 +66,6 @@ class CarrinhoAdapter(
                 holder.img.setImageResource(R.drawable.ic_image)
             }
         }
-        
-        holder.btnDelete.setOnClickListener {
-            it.animate().scaleX(0.9f).scaleY(0.9f).setDuration(80)
-                .withEndAction {
-                    it.animate().scaleX(1f).scaleY(1f).setDuration(120)
-                        .setInterpolator(AccelerateDecelerateInterpolator()).start()
-                    onRemoveClick(item)
-                }.start()
-        }
 
         holder.btnIncrementar.setOnClickListener {
             it.animate().scaleX(0.9f).scaleY(0.9f).setDuration(80)
@@ -80,7 +73,7 @@ class CarrinhoAdapter(
                     it.animate().scaleX(1f).scaleY(1f).setDuration(120)
                         .setInterpolator(AccelerateDecelerateInterpolator()).start()
                     onIncrementClick(item)
-                }.start()
+                }
         }
 
         holder.btnDecrementar.setOnClickListener {
@@ -89,13 +82,20 @@ class CarrinhoAdapter(
                     it.animate().scaleX(1f).scaleY(1f).setDuration(120)
                         .setInterpolator(AccelerateDecelerateInterpolator()).start()
                     onDecrementClick(item)
+                }
+        }
+
+
+        holder.btnDelete.setOnClickListener {
+            it.animate().scaleX(0.9f).scaleY(0.9f).setDuration(80)
+                .withEndAction {
+                    it.animate().scaleX(1f).scaleY(1f).setDuration(120)
+                        .setInterpolator(AccelerateDecelerateInterpolator()).start()
+                    onRemoveClick(item)
                 }.start()
         }
     }
 
-    init {
-        setHasStableIds(true)
-    }
 
     override fun getItemCount() = itens.size
 
@@ -115,6 +115,7 @@ class CarrinhoAdapter(
         override fun getNewListSize(): Int = new.size
         override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
             old[oldItemPosition].id == new[newItemPosition].id
+
         override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean =
             old[oldItemPosition] == new[newItemPosition]
     }

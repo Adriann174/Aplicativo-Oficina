@@ -138,10 +138,18 @@ class MainActivity : AppCompatActivity() {
                 .setPositiveButton("Apagar") { _, _ ->
                     FirebaseRepository.deletarTodosItens(
                         onSuccess = {
-                            Toast.makeText(this, "Todos os itens foram removidos", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                this,
+                                "Todos os itens foram removidos",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         },
                         onFailure = { e ->
-                            Toast.makeText(this, "Erro ao remover todos: ${e.message}", Toast.LENGTH_LONG).show()
+                            Toast.makeText(
+                                this,
+                                "Erro ao remover todos: ${e.message}",
+                                Toast.LENGTH_LONG
+                            ).show()
                         }
                     )
                 }
@@ -154,8 +162,9 @@ class MainActivity : AppCompatActivity() {
             when (item.itemId) {
                 R.id.nav_home -> true
                 R.id.nav_pedidos -> {
-                    startActivity(Intent(this, CarrinhoActivity::class.java))
-                    overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
+                    val intent = Intent(this, CarrinhoActivity::class.java)
+                    startActivity(intent)
+
                     true
                 }
 
@@ -212,7 +221,7 @@ class MainActivity : AppCompatActivity() {
             }
         )
     }
-    
+
 
     companion object {
         private const val REQ_ADD_ITEM = 2001

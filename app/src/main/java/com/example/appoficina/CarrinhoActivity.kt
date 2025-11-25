@@ -136,10 +136,10 @@ class CarrinhoActivity : AppCompatActivity() {
         }
 
         // Obter BottomNavigationView do layout (ajuste R.id.bottom se necessário)
-        val bottom = findViewById<BottomNavigationView>(R.id.bottomNav)
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNav)
 
-        bottom.selectedItemId = R.id.nav_pedidos
-        bottom.setOnItemSelectedListener { item: MenuItem ->
+        bottomNavigationView.selectedItemId = R.id.nav_pedidos
+        bottomNavigationView.setOnItemSelectedListener { item: MenuItem ->
             when (item.itemId) {
                 R.id.nav_pedidos -> true
                 R.id.nav_home -> {

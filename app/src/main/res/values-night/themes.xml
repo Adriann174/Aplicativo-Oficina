@@ -1,7 +1,27 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.AppOficina" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+    <style name="Base.Theme.AppOficina" parent="Theme.Material3.Light.NoActionBar">
+        <item name="android:windowBackground">@color/bg_light</item>
+        <item name="colorPrimary">@color/fiat_red</item>
+        <item name="colorSecondary">@color/metal_grey</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <style name="Theme.AppOficina" parent="Base.Theme.AppOficina" />
+
+    <style name="GlassCard">
+        <item name="android:background">@drawable/glass_card</item>
+        <item name="android:padding">12dp</item>
+    </style>
+
+    <style name="GlassInput">
+        <item name="android:background">@drawable/glass_input</item>
+        <item name="android:padding">12dp</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textColorHint">@color/text_secondary</item>
+    </style>
+
+    <style name="PrimaryButton">
+        <item name="android:background">@drawable/btn_primary</item>
+        <item name="android:textColor">@color/black</item>
     </style>
 </resources>

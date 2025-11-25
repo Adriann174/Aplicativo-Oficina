@@ -9,25 +9,23 @@ object CartRepository {
 
     fun add(item: Item) {
         val current = _items.value ?: mutableListOf()
-
-        // Verificar se o item já existe no carrinho (mesmo ID)
         val existingItem = current.find { it.id == item.id }
 
-        if (existingItem != null) {
-            // Se o item já existe, incrementar a quantidade
-            existingItem.quantidade++
+        val newList = if (existingItem != null) {
+            current.map { i ->
+                if (i.id == item.id) i.copy(quantidade = i.quantidade + 1) else i
+            }.toMutableList()
         } else {
-            // Se é um item novo, adicionar com quantidade 1
-            current.add(item.copy(quantidade = 1))
+            current.toMutableList().apply { add(item.copy(quantidade = 1)) }
         }
 
-        _items.value = current
+        _items.value = newList
     }
 
     fun remove(item: Item) {
         val current = _items.value ?: return
-        current.remove(item)
-        _items.value = current
+        val newList = current.filter { it.id != item.id }.toMutableList()
+        _items.value = newList
     }
 
     fun clear() {
@@ -36,35 +34,29 @@ object CartRepository {
 
     fun incrementarQuantidade(item: Item) {
         val current = _items.value ?: return
-        val existingItem = current.find { it.id == item.id }
-        existingItem?.let {
-            it.quantidade++
-            _items.value = current
-        }
+        val newList = current.map { i ->
+            if (i.id == item.id) i.copy(quantidade = i.quantidade + 1) else i
+        }.toMutableList()
+        _items.value = newList
     }
 
     fun decrementarQuantidade(item: Item) {
         val current = _items.value ?: return
-        val existingItem = current.find { it.id == item.id }
-        existingItem?.let {
-            if (it.quantidade > 1) {
-                it.quantidade--
-            } else {
-                // Se quantidade for 1, remover o item completamente
-                current.remove(it)
-            }
-            _items.value = current
-        }
+        val newList = current.flatMap { i ->
+            if (i.id == item.id) {
+                if (i.quantidade > 1) listOf(i.copy(quantidade = i.quantidade - 1)) else emptyList()
+            } else listOf(i)
+        }.toMutableList()
+        _items.value = newList
     }
 
     fun atualizarQuantidade(item: Item, novaQuantidade: Int) {
         val current = _items.value ?: return
-        val existingItem = current.find { it.id == item.id }
-        existingItem?.let {
-            val q = if (novaQuantidade < 1) 1 else novaQuantidade
-            it.quantidade = q
-            _items.value = current
-        }
+        val q = if (novaQuantidade < 1) 1 else novaQuantidade
+        val newList = current.map { i ->
+            if (i.id == item.id) i.copy(quantidade = q) else i
+        }.toMutableList()
+        _items.value = newList
     }
 }
 
