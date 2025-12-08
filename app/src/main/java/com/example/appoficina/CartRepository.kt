@@ -58,6 +58,19 @@ object CartRepository {
         }.toMutableList()
         _items.value = newList
     }
+
+    // Atualiza nome, descrição e imagePath para o item já presente no carrinho, preservando quantidade
+    fun atualizarDetalhes(itemAtualizado: Item) {
+        val current = _items.value ?: return
+        val newList = current.map { i ->
+            if (i.id == itemAtualizado.id) i.copy(
+                nome = itemAtualizado.nome,
+                descricao = itemAtualizado.descricao,
+                imagePath = itemAtualizado.imagePath
+            ) else i
+        }.toMutableList()
+        _items.value = newList
+    }
 }
 
 

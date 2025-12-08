@@ -262,6 +262,8 @@ class EditItemActivity : AppCompatActivity() {
             FirebaseRepository.atualizarItem(updatedItem,
                 onSuccess = {
                     Toast.makeText(this, "Item atualizado com sucesso!", Toast.LENGTH_SHORT).show()
+                    // Sincronizar o item atualizado com o carrinho (se presente)
+                    CartRepository.atualizarDetalhes(updatedItem)
                     val resultIntent = Intent().apply {
                         putExtra(EXTRA_ITEM, updatedItem)
                     }

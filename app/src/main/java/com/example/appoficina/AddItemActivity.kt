@@ -35,6 +35,7 @@ class AddItemActivity : AppCompatActivity() {
     private lateinit var btnVoltar: ImageView
     private var currentPhotoPath: String? = null
     private var currentBarcode: String? = null
+    private var scanPending: Boolean = false
     private val REQUEST_IMAGE_CAPTURE = 1
     private val REQUEST_IMAGE_GALLERY = 2
     private val REQUEST_PERMISSION_CAMERA = 100
@@ -62,6 +63,8 @@ class AddItemActivity : AppCompatActivity() {
 
     private fun setupClickListeners() {
         btnCamera.setOnClickListener {
+            // Fluxo de foto: garantir que não há scan pendente
+            scanPending = false
             if (checkCameraPermission()) {
                 dispatchTakePictureIntent()
             } else {
@@ -82,12 +85,14 @@ class AddItemActivity : AppCompatActivity() {
         }
 
         inputNomeLayout.setEndIconOnClickListener {
-            Toast.makeText(this, "Abrindo scanner...", Toast.LENGTH_SHORT).show()
-             val intent = Intent(this, ScanBarcodeActivity::class.java)
-            startActivityForResult(intent, REQUEST_SCAN_BARCODE)
-            startActivityForResult(intent, REQUEST_PERMISSION_CAMERA)
-            requestCameraPermission()
-            dispatchTakePictureIntent()
+            // Fluxo de scanner: solicitar permissão de câmera antes de abrir
+            if (checkCameraPermission()) {
+                val intent = Intent(this, ScanBarcodeActivity::class.java)
+                startActivityForResult(intent, REQUEST_SCAN_BARCODE)
+            } else {
+                scanPending = true
+                requestCameraPermission()
+            }
         }
 
         btnSalvar.setOnClickListener {
@@ -222,8 +227,17 @@ class AddItemActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == REQUEST_PERMISSION_CAMERA) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                dispatchTakePictureIntent()
+                if (scanPending) {
+                    // Abrir scanner automaticamente após a permissão
+                    scanPending = false
+                    val intent = Intent(this, ScanBarcodeActivity::class.java)
+                    startActivityForResult(intent, REQUEST_SCAN_BARCODE)
+                } else {
+                    // Fluxo de captura de foto
+                    dispatchTakePictureIntent()
+                }
             } else {
+                scanPending = false
                 Toast.makeText(this, "Permissão da câmera negada", Toast.LENGTH_SHORT).show()
             }
         }
